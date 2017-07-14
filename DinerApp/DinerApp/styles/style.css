@@ -1,0 +1,46 @@
+#menu {
+    height:100%; 
+    overflow: auto;
+}
+
+#totalDiv{
+    border-top: 3px solid black;
+}
+#totalPTag{
+    font-size: 12pt;
+     display: inline-block;
+}
+
+body{
+    background-color: #5CDB95;
+    font-family: 'Anton', sans-serif;
+    padding-left: 1.2%;
+    padding-right: 1.2%;
+   font-family: 'Anton', sans-serif; 
+}
+
+#title{
+    color: #05386B;
+    border-bottom: thick solid #05386B;
+}
+
+#Appetizers, #Chickens, #Burger, #Salad, #menus{
+    color: #05386B;
+    font-size: 20px;
+    /*font-family: 'Anton', sans-serif;*/
+}
+
+#total, #totalPTag, #userinfo, #msg{
+    color: #05386B;
+    font-size: 16px;
+    /*font-family: 'Anton', sans-serif;*/
+}
+#carts, #menus{
+    color: #05386B;
+    font-size: 25px;
+    /*font-family: 'Anton', sans-serif;*/
+}
+
+#checkout{
+    background-color: #05386B;
+}

@@ -1,0 +1,50 @@
+{
+    "Appetizers":[
+        {"name": "Boneless Wings",
+        "price" : 10.49},
+        {"name": "Salsa Verde Beef Nachos",
+        "price" : 9.99},
+        {"name": "Chicken Quesadilla",
+        "price" : 8.29},
+        {"name": "Steak Quesadilla",
+        "price" : 9.29},
+        {"name": "Mozzerella Sticks",
+        "price" : 8.29}
+    ],
+    "Salads": [
+        {"name": "Thai Shrimp Salad",
+        "price": 11.29},
+        {"name": "Grilled Chicken Caesar Salad",
+        "price": 10.79},
+        {"name": "Oriental Chicken Salad",
+        "price": 10.99},
+        {"name": "Crispy Chicken 'N Cornbread Salad",
+        "price": 10.99},
+        {"name": "Southwest Grilled Chicken Salad",
+        "price": 10.29}
+    ],
+    "Chicken":[
+        {"name": "NEW Caprese Mozzarella Chicken",
+        "price": 10.99},
+        {"name": "Cedar Grilled Lemon Chicken",
+        "price": 11.29},
+        {"name": "Chicken Tenders Platter",
+        "price": 11.29},
+        {"name": "Bourbon Street Chicken + Shrimp",
+        "price": 13.49},
+        {"name": "Fiesta Lime Chicken",
+        "price": 12.49}
+    ],
+    "Burgers": [
+        {"name": "NEW Whisky Bacon Burger",
+        "price": 10.99},
+        {"name": "All-day Brunch Burger",
+        "price": 10.99},
+        {"name": "NEW Caprese Mozzarella Burger",
+        "price": 10.99},
+        {"name": "Quesadilla Burger",
+        "price": 10.69},
+        {"name": "The American Standard",
+        "price": 9.99}
+    ]
+}
