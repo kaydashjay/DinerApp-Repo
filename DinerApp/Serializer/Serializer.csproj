@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DDA023B0-167C-435E-8194-B1CE8965835A}</ProjectGuid>
+    <ProjectGuid>{EA8C4203-461D-42DE-8671-8EC47C709853}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DAO</RootNamespace>
-    <AssemblyName>DAO</AssemblyName>
+    <RootNamespace>Serializer</RootNamespace>
+    <AssemblyName>Serializer</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -41,15 +41,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cart.cs" />
-    <Compile Include="CartDAO.cs" />
-    <Compile Include="DataAO.cs" />
-    <Compile Include="Menu.cs" />
-    <Compile Include="MenuDAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="User.cs" />
-    <Compile Include="UserDAO.cs" />
-    <Compile Include="Address.cs" />
+    <Compile Include="Serializer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DAO\DAO.csproj">
+      <Project>{dda023b0-167c-435e-8194-b1ce8965835a}</Project>
+      <Name>DAO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DinerApp\DinerApp.WebAPI.csproj">
+      <Project>{4579dfbf-87e4-4b24-8e68-9e8e7f138317}</Project>
+      <Name>DinerApp.WebAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DTO\DTO.csproj">
+      <Project>{496b4b61-6a15-42ad-8094-6d943e5f8c7b}</Project>
+      <Name>DTO</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -15,7 +15,7 @@
     <RootNamespace>DinerApp.WebAPI</RootNamespace>
     <AssemblyName>DinerApp.WebAPI</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -97,11 +97,10 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\Cart.cs" />
-    <Compile Include="App_Start\Menu.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -130,10 +129,6 @@
       <Project>{496b4b61-6a15-42ad-8094-6d943e5f8c7b}</Project>
       <Name>DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MenuItem\MenuItem.csproj">
-      <Project>{27c96056-d782-461c-8100-c76a92cfc4d8}</Project>
-      <Name>MenuItem</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -150,7 +145,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>54746</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:54746/</IISUrl>
+          <IISUrl>http://localhost/DinerAppAPI</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

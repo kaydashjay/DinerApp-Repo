@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 
 namespace DAO
 {
-    public class CartDAO
+    public class CartDAO : DataAO
     {
         /// <summary>
         /// a Shape class
@@ -15,8 +15,10 @@ namespace DAO
         // private fields
         private string name;
         private double price;
-        private string type;
+       // private string type;
         private int quantity;
+        private int id;
+        private static List<CartDAO> cart = null;
 
         #region constructors
         /// <summary>
@@ -26,7 +28,7 @@ namespace DAO
         {
             name = "";
             price = 0;
-            type = "";
+           // type = "";
             quantity = 0;
         }
 
@@ -35,16 +37,23 @@ namespace DAO
         /// </summary>
         /// <param name="height">height of shape</param>
         /// <param name="width">width of shape</param>
-        public CartDAO(string name, double price, string type, int quantity)
+        public CartDAO(int id, string name, double price, int quantity)
         {
+            this.id = id;
             this.name = name;
             this.price = price;
-            this.type = type;
+            //this.type = type;
             this.quantity = quantity;
         }
         #endregion constructors
 
         #region properties
+        [DataMember]
+        public int ID
+        {
+            get { return id; }
+            set { id = value; }
+        }
         [DataMember]
         public string Name
         {
@@ -58,11 +67,11 @@ namespace DAO
             set { price = value; }
         }
 
-        [DataMember]
+        /*[DataMember]
         public string Type
         {
             get { return type; }
-        }
+        }*/
 
         [DataMember]
         public int Quantity
@@ -71,6 +80,21 @@ namespace DAO
             set { quantity = value; }
         }
         #endregion properties
+
+        #region methods
+        public static void AddItem(CartDAO listItem)
+        {
+            cart.Add(listItem);
+        }
+       /* public static List<CartDAO> GetCart()
+        {
+            var query = from employee in dataContext.Employees
+                        select employee;
+            return query.ToList();
+        }*/
+
+        #endregion methods 
+
     }
 }
 

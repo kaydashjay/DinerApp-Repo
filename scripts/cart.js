@@ -2,8 +2,31 @@
 var c= console;
 
 window.cart = (function(){
-    var cart=[];
-    
+    var cart = [];
+    var count = 0;
+    function ajax(url, method, data) {
+        return new Promise(function (resolve, reject) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(method, url, true);
+            xhr.responseType = "text";
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200 || xhr.status === 201) {
+                        resolve(JSON.parse(xhr.responseText));
+                    } else {
+                        reject(Error(xhr.status + " " + xhr.statusText));
+                    }
+                }
+            };
+            xhr.onerror = function () {
+                reject(Error("Network Error"));
+            };
+
+            xhr.send(data);
+        });
+    }
+
 //gets the item object
     function getItem(name){
         for (var i=0; i<cart.length;i++){
@@ -35,20 +58,41 @@ window.cart = (function(){
             return false;
         }
     }
+
 //adds item to cart array
     function addItem(item, price, amount){
-    var Item={}; //creats item object
-    Item={"name": null,"price": null, "quantity": null}; //creates null object for each item
-    Item["name"]=item;
-    Item["price"]=Number.parseFloat(price);
-    Item["quantity"]=Number.parseInt(amount);
-
-    cart.push(Item);//pushes object in cart array
+        if (inCart(item)) {
+            var li = getItem(item);
+            li["quantity"] = Number.parseInt(li["quantity"]);
+            amount = Number.parseInt(amount);
+            li["quantity"] += amount;
+        }
+        else {
+            var Item = {}; //creats item object
+            count++;
+            
+           // \"name\":\"Boneless Wings\",\"price\":10.49,\"quantity\":3.0}
+            Item = "\"{ 'ID': '" + count + "', 'name': '" + item + "', 'price': '" + Number.parseFloat(price) + "', 'quantity': '" + Number.parseFloat(amount)+"'}\"";
+          /*  Item["ID"] = count;
+            Item["name"] = item;
+            Item["price"] = Number.parseFloat(price);
+            Item["quantity"] = Number.parseInt(amount);*/
+            c.log(Item);
+            cart.push(Item);//pushes object in cart array
+            var promise = ajax("http://localhost/DinerAppAPI/api/Cart", "POST", Item);
+            promise.then(function (data) {
+                c.log(data);
+            });
+        }
     };
 
 //returns cart array
-    function getCart (callback){
-        return callback(cart);
+    function getCart(callback) {
+        var promise = ajax("http://localhost/DinerAppAPI/api/Cart", "GET", null);
+        promise.then(function (data) {
+            callback(data);
+        });
+        
     };
 
 //update the quantity of an item

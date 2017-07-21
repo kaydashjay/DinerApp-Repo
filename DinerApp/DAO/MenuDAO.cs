@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 namespace DAO
 {
     [DataContract]
-    public class MenuDAO
+    public class MenuDAO : DataAO
     {
         /// <summary>
         /// a Shape class

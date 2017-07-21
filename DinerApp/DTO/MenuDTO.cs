@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
+using DAO;
+//using Serialization;
 
 namespace DTO
 {
     [DataContract]
-    public class MenuDTO
+    public class MenuDTO : DataTO
     {
         [DataMember]
         public string name { get; set; }
@@ -24,7 +26,20 @@ namespace DTO
             type = t;
             price = p;
         }
+
+       /* public static string SerializeMenu(MenuDAO menu)
+        {
+
+            return Serializer.Serializer.ListToJson(menu);
         }
+
+        public static MenuDTO DeserializeMenu (string Menu)
+        {
+            return Serializer.Serializer.JsonToList(Menu) as MenuDTO;
+        }
+        */
+
+    }
 }
 
         

@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DinerApp", "DinerApp\DinerApp.csproj", "{4579DFBF-87E4-4B24-8E68-9E8E7F138317}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuItem", "MenuItem\MenuItem.csproj", "{27C96056-D782-461C-8100-C76A92CFC4D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DinerApp.WebAPI", "DinerApp\DinerApp.WebAPI.csproj", "{4579DFBF-87E4-4B24-8E68-9E8E7F138317}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTO", "DTO\DTO.csproj", "{496B4B61-6A15-42AD-8094-6D943E5F8C7B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAO", "DAO\DAO.csproj", "{DDA023B0-167C-435E-8194-B1CE8965835A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DinerApp.Tests", "DinerApp.Tests\DinerApp.Tests.csproj", "{20C9B9C3-8958-4F33-9C8A-29DC3721CFF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +21,6 @@ Global
 		{4579DFBF-87E4-4B24-8E68-9E8E7F138317}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4579DFBF-87E4-4B24-8E68-9E8E7F138317}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4579DFBF-87E4-4B24-8E68-9E8E7F138317}.Release|Any CPU.Build.0 = Release|Any CPU
-		{27C96056-D782-461C-8100-C76A92CFC4D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{27C96056-D782-461C-8100-C76A92CFC4D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27C96056-D782-461C-8100-C76A92CFC4D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{27C96056-D782-461C-8100-C76A92CFC4D8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{496B4B61-6A15-42AD-8094-6D943E5F8C7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{496B4B61-6A15-42AD-8094-6D943E5F8C7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{496B4B61-6A15-42AD-8094-6D943E5F8C7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{DDA023B0-167C-435E-8194-B1CE8965835A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDA023B0-167C-435E-8194-B1CE8965835A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDA023B0-167C-435E-8194-B1CE8965835A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20C9B9C3-8958-4F33-9C8A-29DC3721CFF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20C9B9C3-8958-4F33-9C8A-29DC3721CFF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20C9B9C3-8958-4F33-9C8A-29DC3721CFF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20C9B9C3-8958-4F33-9C8A-29DC3721CFF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

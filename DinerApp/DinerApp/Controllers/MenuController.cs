@@ -4,8 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using DTO;
 using DAO;
 using System.Web.Http.Cors;
+using Newtonsoft.Json;
+
 
 
 namespace DinerApp.Controllers
@@ -14,11 +17,13 @@ namespace DinerApp.Controllers
     public class MenuController : ApiController
     {
         [HttpGet]
-        public IEnumerable<MenuDAO> GetMenu()
+        public string GetMenu()
         {
+            var menuDTO = Menu.menu.MenuConvertToDTO();
 
-            return Menu.menu;
-            
+             var json = JsonConvert.SerializeObject(menuDTO);
+
+            return json;
         }
 
         //need for cart async
