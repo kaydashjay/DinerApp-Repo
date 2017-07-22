@@ -10,24 +10,24 @@ namespace DTO
     [DataContract]
     public class CartDTO : DataTO
     {
-        [DataMember]
-        public string name { get; set; }
+        
         //[DataMember]
        // public string type { get; set; }
         [DataMember]
-        public double price { get; set; }
-        [DataMember]
         public int quantity { get; set; }
+        [DataMember]
+        public string name { get; set; }
+        [DataMember]
+        public decimal price { get; set; }
         [DataMember]
         public int id { get; set; }
 
         public CartDTO() { }
-        public CartDTO(int id,double p, string n, int q)
+        public CartDTO(int id,string name, decimal price, int q)
         {
             this.id = id;
-            name = n;
-            //type = t;
-            price = p;
+            this.price = price;
+            this.name = name;
             quantity = q;
         }
 

@@ -12,21 +12,18 @@ namespace DAO
     using System;
     using System.Collections.Generic;
     
-    public partial class Menu
+    public partial class Category
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Menu()
+        public Category()
         {
-            this.Carts = new HashSet<Cart>();
+            this.Menus = new HashSet<Menu>();
         }
     
-        public int menu_id { get; set; }
         public int cat_id { get; set; }
-        public string name { get; set; }
-        public decimal price { get; set; }
+        public string category1 { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Cart> Carts { get; set; }
-        public virtual Category Category { get; set; }
+        public virtual ICollection<Menu> Menus { get; set; }
     }
 }

@@ -39,7 +39,7 @@ var getMenu = function (callback){
     var promise = ajax("http://localhost/DinerAppAPI/api/Menu", "GET",null);
  promise.then(function (data)
  {
-   callback(data);
+   callback(JSON.parse(data));
  });
 
 //     $.ajax("http://localhost/DinerAppAPI/api/Menu",{

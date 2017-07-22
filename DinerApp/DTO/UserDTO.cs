@@ -18,15 +18,24 @@ namespace DTO
         [DataMember]
         public int id { get; set; }
         [DataMember]
-        public Address address { get; set; }
+        public string street{ get; set; }
+        [DataMember]
+        public string city { get; set; }
+        [DataMember]
+        public string state { get; set; }
+        [DataMember]
+        public int zip { get; set; }
 
         public UserDTO() { }
-        public UserDTO(string Fname, string Lname, int Id, Address Address)
+        public UserDTO(int Id, string Fname, string Lname, string street,string city, string state, int zipcode  )
         {
             this.fname = Fname;
-            this.lname = Lname;
-            this.address = Address;
+            this.lname = Lname;         
             this.id = Id;
+            this.street = street;
+            this.city = city;
+            this.state = state;
+            this.zip = zipcode;
 
         }
         

@@ -8,7 +8,7 @@ using DTO;
 using DAO;
 using System.Web.Http.Cors;
 using Newtonsoft.Json;
-
+using AutoMapper;
 
 
 namespace DinerApp.Controllers
@@ -16,12 +16,19 @@ namespace DinerApp.Controllers
     [EnableCors(origins:"*", headers:"*", methods:"*")]
     public class MenuController : ApiController
     {
+        
+        static DinerAppDB2Entities db = new DinerAppDB2Entities();
+
         [HttpGet]
         public string GetMenu()
         {
-            var menuDTO = Menu.menu.MenuConvertToDTO();
+           
+          var menu = (from item in db.Menus
+                       select item).ToList();
 
-             var json = JsonConvert.SerializeObject(menuDTO);
+            IEnumerable<MenuDTO> menuDTO = DTOMapper.MenuConvertToDTO(menu);
+
+            var json = JsonConvert.SerializeObject(menuDTO);
 
             return json;
         }
@@ -33,15 +40,15 @@ namespace DinerApp.Controllers
         {
             try
             {
-                Menu.menu.RemoveAt(index);
+               // Menu.menu.RemoveAt(index);
             }
             catch (ArgumentOutOfRangeException e)
             {
                 //log the exception e.Message
                 return BadRequest("The index is out of range");
             }
-
-            return Ok(Menu.menu);
+            return null;
+            //return Ok(Menu.menu);
         }
         /*[HttpPost]
         public IHttpActionResult PostMenu(List<MenuItem> data)

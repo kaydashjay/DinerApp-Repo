@@ -30,9 +30,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,15 +49,64 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cart.cs" />
+    <Compile Include="Cart.cs">
+      <DependentUpon>DinerAppModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="CartDAO.cs" />
+    <Compile Include="Category.cs">
+      <DependentUpon>DinerAppModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataAO.cs" />
-    <Compile Include="Menu.cs" />
+    <Compile Include="DinerAppModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DinerAppModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DinerAppModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DinerAppModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DinerAppModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DinerAppModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Menu.cs">
+      <DependentUpon>DinerAppModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="MenuDAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="User.cs" />
+    <Compile Include="User.cs">
+      <DependentUpon>DinerAppModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="UserDAO.cs" />
-    <Compile Include="Address.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <EntityDeploy Include="DinerAppModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DinerAppModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="DinerAppModel.edmx.diagram">
+      <DependentUpon>DinerAppModel.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DinerAppModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DinerAppModel.edmx</DependentUpon>
+      <LastGenOutput>DinerAppModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="DinerAppModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DinerAppModel.edmx</DependentUpon>
+      <LastGenOutput>DinerAppModel.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

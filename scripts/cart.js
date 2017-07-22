@@ -90,7 +90,7 @@ window.cart = (function(){
     function getCart(callback) {
         var promise = ajax("http://localhost/DinerAppAPI/api/Cart", "GET", null);
         promise.then(function (data) {
-            callback(data);
+            callback(JSON.parse(data));
         });
         
     };

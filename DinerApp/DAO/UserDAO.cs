@@ -17,7 +17,12 @@ namespace DAO
         private string fname;
         private string lname;
         private int userID;
-        private Address address;
+        private string streetAddress;
+        private string city;
+        private string state;
+        private int zip;
+
+        
 
         #region constructors
         /// <summary>
@@ -36,18 +41,22 @@ namespace DAO
         /// </summary>
         /// <param name="fname">height of shape</param>
         /// <param name="lname">width of shape</param>
-        public UserDAO(string fname, string lname, int id, Address address)
+        public UserDAO(string fname, string lname, int id, string street, string city, string state, int zipcode)
         {
             this.fname = fname;
             this.lname = lname;
-            this.address = address;
             this.userID = id;
+            this.streetAddress = street;
+            this.city = city;
+            this.state = state;
+            this.zip = zipcode;
 
-        }
-        #endregion constructors
 
-        #region properties
-        [DataMember]
+    }
+    #endregion constructors
+
+    #region properties
+    [DataMember]
         public string Fname
         {
             get { return fname; }
@@ -61,16 +70,35 @@ namespace DAO
         }
 
         [DataMember]
-        public Address Address
-        {
-            get { return address; }
-            set { address = value; }
-        }
-
-        [DataMember]
         public int ID
         {
             get { return userID; }
+        }
+        [DataMember]
+        public string Street
+        {
+            get { return streetAddress; }
+            set { streetAddress = value; }
+        }
+        [DataMember]
+        public string City
+        {
+            get { return city; }
+            set { city = value; }
+        }
+
+        [DataMember]
+        public string State
+        {
+            get { return state; }
+            set { state = value; }
+        }
+
+        [DataMember]
+        public int Zip
+        {
+            get { return zip; }
+            set { zip = value; }
         }
         #endregion properties
     }

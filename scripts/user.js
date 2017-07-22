@@ -37,7 +37,7 @@ window.User = (function(){
 
         var promise = ajax("http://localhost/DinerAppAPI/api/User", "GET", null);
         promise.then(function (data) {
-            callback(data);
+            callback(JSON.parse(data));
         });
     
     };

@@ -38,51 +38,49 @@ var d = document;
         }
         //grabs the menu from json file
         Menu.getMenu(function (data) {
-            //show appetizers
-            data = JSON.parse(data);
-                for (var i = 0; i < data.length; i++) {
-                    if (data[i].type == "Appetizers") {
-                        var name = data[i].name;
-                        var price = data[i].price;
-                        apps.appendChild(createMenuLi(name, price));
-                    }
-                    //show salads
-                    if (data[i].type == "Salads") {
-                        var name = data[i].name;
-                        var price = data[i].price;
-                        salads.appendChild(createMenuLi(name, price));
-                    }
-                    //show chicken dishes
-                    if (data[i].type == "Chicken") {
-                        var name = data[i].name;
-                        var price = data[i].price;
-                        chicken.appendChild(createMenuLi(name, price));
-                    }
-                    //show burgers
-                    if (data[i].type == "Burgers") {
-                        var name = data[i].name;
-                        var price = data[i].price;
-                        burgers.appendChild(createMenuLi(name, price));
-                    }
+            //show appetizers        
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].cat == 1) {
+                    var name = data[i].name;
+                    var price = data[i].price;
+                    apps.appendChild(createMenuLi(name, price));
+                }
+                //show salads
+                if (data[i].cat == 4) {
+                    var name = data[i].name;
+                    var price = data[i].price;
+                    salads.appendChild(createMenuLi(name, price));
+                }
+                //show chicken dishes
+                if (data[i].cat == 2) {
+                    var name = data[i].name;
+                    var price = data[i].price;
+                    chicken.appendChild(createMenuLi(name, price));
+                }
+                //show burgers
+                if (data[i].cat == 3) {
+                    var name = data[i].name;
+                    var price = data[i].price;
+                    burgers.appendChild(createMenuLi(name, price));
+                }
             }
         });
 
         //gets user information from user.js
         User.getUser(function (data) {
-            data = JSON.parse(data);
-           
-            var userText = "Welcome " + data.fname + "! Here is your cart!<br> Your shipping address is: <br>" + data.address["Street"] + "<br>" + data.address["City"] + ", " + data.address["State"] + " " + data.address["Zip"];
+
+            var userText = "Welcome " + data[0].fname + "! Here is your cart!<br> Your shipping address is: <br>" + data[0].street + "<br>" + data[0].city + ", " + data[0].state + " " + data[0].zip;
             userinfo.innerHTML = userText;
         });
 
         //getCart Test
-        Cart.getCart(function (data) {
-            data = JSON.parse(data);
-            for (var i = 0; i < data.length; i++) {
-                cart.appendChild(createCartLit(data[i].name, data[i].price, data[i].quantity));
+         Cart.getCart(function (data) {
+             c.log(data);
+             for (var i = 0; i < data.length; i++) {
+                 cart.appendChild(createCartLit(data[i].name, data[i].price, data[i].quantity));
 
-            }
-        });
+             }
+         });
         function createCartLit(item, price, quantity) {
             //var listItem = Cart.getItem(item);//get's the item with its keys and values
             var li = CreateLi(item,price );//creats the list item
@@ -255,7 +253,7 @@ var d = document;
                                     }
                                 }
                                 else {
-                                    cart.appendChild(createCartLi(item["name"]));//append the new items that aren't in the cart array
+                                    cart.appendChild(createCartLit(item["name"]));//append the new items that aren't in the cart array
                                 }
                             }, this);
                             

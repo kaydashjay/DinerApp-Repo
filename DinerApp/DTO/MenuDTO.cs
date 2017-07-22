@@ -15,15 +15,18 @@ namespace DTO
         [DataMember]
         public string name { get; set; }
         [DataMember]
-        public string type { get; set; }
+        public int id { get; set; }
+        [DataMember]
+        public int cat { get; set; }
         [DataMember]
         public double price { get; set; }
 
         public MenuDTO() { }
-        public MenuDTO(string n, double p, string t)
+        public MenuDTO(int i, string n, double p, int cat)
         {
+            id = i;
             name = n;
-            type = t;
+            this.cat = cat;
             price = p;
         }
 

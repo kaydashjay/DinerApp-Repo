@@ -15,6 +15,7 @@ namespace DAO
         /// </summary>
         // private fields
         private string name;
+        private int id;
         private double price;
         private string type;
 
@@ -34,8 +35,9 @@ namespace DAO
         /// </summary>
         /// <param name="height">height of shape</param>
         /// <param name="width">width of shape</param>
-        public MenuDAO(string name, double price, string type)
+        public MenuDAO(int id, string name, double price, string type)
         {
+            this.id = id;
             this.name = name;
             this.price = price;
             this.type = type;
@@ -48,6 +50,12 @@ namespace DAO
         {
             get { return name; }
             set { name = value; }
+        }
+        [DataMember]
+        public int ID
+        {
+            get { return id; }
+            set { id = value; }
         }
         [DataMember]
         public double Price
