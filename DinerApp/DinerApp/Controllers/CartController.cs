@@ -116,7 +116,7 @@ namespace DinerApp.WebAPI.Controllers
 
                 item.quantity = (int)cart["quantity"];
                 db.SaveChanges();
-                return Ok();
+                return Ok(item.quantity);
             }
         }
 

@@ -83,7 +83,7 @@ var d = document;
         function createCartLit(item, price, quantity) {
             var li = CreateLi(item,price );//creats the list item
             Cart.getTotal(function (total){
-                 totalP.innerHTML = "$" + total}); //display the updated total when item added to cart
+                 totalP.innerHTML = "$" + total;}); //display the updated total when item added to cart
             var amount = li.childNodes[2].childNodes[1]//grabs amount input element    
             amount.value = quantity;
             amount.min = 1;
@@ -164,7 +164,6 @@ var d = document;
         function createCartLi(listItem) {
           var li = CreateLi(listItem[0]['name'], listItem[0].price);//creats the list item
            Cart.getTotal(function (total){
-               c.log (total);
                  totalP.innerText = "$" + total;
             }); //display the updated total when item added to cart
             var amount = li.childNodes[2].childNodes[1]//grabs amount input element    
@@ -195,8 +194,21 @@ var d = document;
         //CART EVENT HANDLING
         //handles event for when the entire cart is clicked
         cart.addEventListener("click", function (event) {
-            //event handling for delete button of each newly added item
             var food = event.target.parentNode.childNodes[0];
+ /**************************UPDATE**********************/
+            //event handling for update button of each newly added item
+            if (event.target.innerText == "Update") {
+                var amount = event.target.parentNode.childNodes[3].childNodes[1];
+                //updates cart DB
+                Cart.updateItem(food.nodeValue, amount.value, function (){;}); 
+                Cart.getTotal(function (total){
+                    totalP.innerText = "$" + total;  
+                }); 
+                var updateButton = event.target.parentNode.childNodes[2];
+                    updateButton.className = "btn btn-default";
+            }
+            /*****************DELETE************************* */
+            //event handling for delete button of each newly added item
             if (event.target.innerText == "Delete") {
                 if (confirm("Click OK if you are sure you want to delete " + food.nodeValue + "?")) {
                     Cart.removeItem(food.nodeValue, function (){
@@ -216,21 +228,10 @@ var d = document;
                     //totalP.innerText = "$0.00"; //set initial value of total
                     checkoutButton.disabled = true;
                 }
+                }
+           
             }
-            //event handling for update button of each newly added item
-            if (event.target.innerText == "Update") {
-                var amount = event.target.parentNode.childNodes[3].childNodes[1];
-                //updates cart DB
-                Cart.updateItem(food.nodeValue, amount.value, function (){
-                    var updateButton = event.target.parentNode.childNodes[2];
-                updateButton.className = "btn btn-default";
-                Cart.getTotal(function (total){
-                    totalP.innerText = "$" + total;}); //update displayed total
-                }); 
-                
-            }
-                
-            }
+            
         });
 
         //event handling for when the quantity changes of each newly added item
@@ -242,6 +243,7 @@ var d = document;
         //MENU EVENT HANDLING
         //for click
         menu.addEventListener("click", function (event) {
+            /*****************ADD TO CART********************* */
             //event handling for add button of each newly added item
             if (event.target.innerText == "Add to Cart") {
                 var amount = event.target.parentNode.childNodes[2].childNodes[1];

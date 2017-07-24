@@ -82,8 +82,6 @@ window.cart = (function(){
     function updateItem(name, quantity){
         var item = "\"{'name':'"+name+"', 'quantity':"+Number.parseInt(quantity)+"}\"";
         var promise = ajax("http://localhost/DinerAppAPI/api/Cart", "PUT", item);
-        // var item = getItem(name); //gets item object
-        //     item["quantity"]=quantity; //updates quantity
     };
 
 //removes item from array
@@ -118,7 +116,7 @@ window.cart = (function(){
     function getTotal(callback){
          var promise = ajax("http://localhost/DinerAppAPI/api/Cart/GetTotal", "GET", null);
          promise.then(function (data){
-            callback(data);
+            callback(data.toFixed(2));
         });
     }
     
