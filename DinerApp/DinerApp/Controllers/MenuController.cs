@@ -22,8 +22,9 @@ namespace DinerApp.Controllers
         [HttpGet]
         public string GetMenu()
         {
+            List<Menu> menu = new List<Menu>();
            
-          var menu = (from item in db.Menus
+          menu = (from item in db.Menus
                        select item).ToList();
 
             IEnumerable<MenuDTO> menuDTO = DTOMapper.MenuConvertToDTO(menu);

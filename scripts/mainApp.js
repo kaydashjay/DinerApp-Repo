@@ -15,7 +15,7 @@ var d = document;
         var burgers = d.getElementById("burgers");
         var checkoutButton = d.getElementById("checkout");
         var message = d.getElementById("msg"); //"Cart is empty" message
-
+    
         var total = d.getElementById("total");
         total.innerText = "$0.00"; //set initial value of total
 
@@ -38,7 +38,7 @@ var d = document;
         }
         //grabs the menu from json file
         Menu.getMenu(function (data) {
-            //show appetizers        
+            //show appetizers     
             for (var i = 0; i < data.length; i++) {
                 if (data[i].cat == 1) {
                     var name = data[i].name;
@@ -75,14 +75,12 @@ var d = document;
 
         //getCart Test
          Cart.getCart(function (data) {
-             c.log(data);
              for (var i = 0; i < data.length; i++) {
                  cart.appendChild(createCartLit(data[i].name, data[i].price, data[i].quantity));
 
              }
          });
         function createCartLit(item, price, quantity) {
-            //var listItem = Cart.getItem(item);//get's the item with its keys and values
             var li = CreateLi(item,price );//creats the list item
             total.innerText = "$" + Cart.getTotal(); //display the updated total when item added to cart
             var amount = li.childNodes[2].childNodes[1]//grabs amount input element    
@@ -141,6 +139,9 @@ var d = document;
 
             return li;
         }
+        function getItemData(data){
+            return data;
+        }
 
         //creates menu items and all of its components and event handling
         function createMenuLi(item, cost) {
@@ -156,12 +157,12 @@ var d = document;
             return li;
         }
         //creats cart list items
-        function createCartLi(item) {
-            var listItem = Cart.getItem(item);//get's the item with its keys and values
-            var li = CreateLi(listItem.name, listItem.price);//creats the list item
+        function createCartLi(listItem) {
+         c.log(listItem);
+          var li = CreateLi(listItem[0]['name'], listItem[0].price);//creats the list item
             total.innerText = "$" + Cart.getTotal(); //display the updated total when item added to cart
             var amount = li.childNodes[2].childNodes[1]//grabs amount input element    
-            amount.value = listItem.quantity;
+            amount.value = listItem[0].quantity;
             amount.min = 1;
 
             //grabs the deleteButton that deletes the item from the cart
@@ -178,10 +179,8 @@ var d = document;
             updateButton.style = "float: right; margin-right: 15px;";
 
             //inserts the update button in the list item
-            li.insertBefore(updateButton, li.childNodes[2]); //appends the updateButton to li
-
-            return li;
-            
+            li.insertBefore(updateButton, li.childNodes[2]); //appends the updateButton to li 
+           return li;
         }
 
         //CART EVENT HANDLING
@@ -239,24 +238,34 @@ var d = document;
                         amount.value = 0;
                     }
                     else {
+                        
                         //add item to cart array
-                        Cart.addItem(food.nodeValue, price, amount.value);
-                        Cart.getCart(function (data) {
-                            data = JSON.parse(data);
+                        Cart.addItem(food.nodeValue, price, amount.value, function (item) {
+                            cart.childNodes.forEach( function (item){
+                                item.remove();
+                            });
+                             Cart.getCart(function (cart) {
                             //go through cart array and add to DOM
-                            data.forEach(function (item, i) {
+                            cart.forEach(function (item, i) {
                                 //if item already in DOM and the quantity in DOM and cart are different, make DOM = cart quantity
-                                if (inDOMcart(item["name"])) {
-                                    var li = getDOMcartItem(item["name"]);
-                                    if (Number.parseInt(li.childNodes[3].childNodes[1].value) != item["quantity"]) {
-                                        li.childNodes[3].childNodes[1].value = item["quantity"]
-                                    }
-                                }
-                                else {
-                                    cart.appendChild(createCartLit(item["name"]));//append the new items that aren't in the cart array
-                                }
+                                //  if (inDOMcart(item["name"])) {
+                                //      var li = getDOMcartItem(item["name"]);
+                                   
+                                //         var q = Number.parseInt(li.childNodes[3].childNodes[1].value); 
+                                //          q+= item["quantity"];
+                                //          li.childNodes[3].childNodes[1].value = q; 
+
+
+                                   
+                                //  }
+                                //  else {
+                                    Cart.getItem (item["menu_id"], function(data){
+                                        cart.appendChild(createCartLi(data));//append the new items that aren't in the cart array
+
+                                    });
+                                //}
                             }, this);
-                            
+                        });        
                         });
                 amount.value = 0;
                             message.style.display = "none";

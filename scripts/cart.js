@@ -28,14 +28,24 @@ window.cart = (function(){
     }
 
 //gets the item object
-    function getItem(name){
-        for (var i=0; i<cart.length;i++){
-            if(cart[i]["name"]==name)
-            {
-                return  cart[i];
-            }
-        }
-       c.log(name + " Not in cart");
+    function getItem(id, callback){
+        var promise = ajax("http://localhost/DinerAppAPI/api/Cart/"+id+"/", "GET", null);
+         promise.then(function (data){
+            callback(JSON.parse(data));
+            //JSON.parse(data)
+    //         if (data){
+    //         return ;
+    //         }
+    //     else{
+    //    c.log(name + " Not in cart");
+    //     }
+        })
+        // for (var i=0; i<cart.length;i++){
+        //     if(cart[i]["name"]==name)
+        //     {
+        //         return  cart[i];
+        //     }
+        // }
     };
 
 //checks if item is in the cart array
@@ -60,30 +70,23 @@ window.cart = (function(){
     }
 
 //adds item to cart array
-    function addItem(item, price, amount){
-        if (inCart(item)) {
-            var li = getItem(item);
-            li["quantity"] = Number.parseInt(li["quantity"]);
-            amount = Number.parseInt(amount);
-            li["quantity"] += amount;
-        }
-        else {
-            var Item = {}; //creats item object
-            count++;
+    function addItem(item, price, amount, callback){
+            //creats item object
+            
             
            // \"name\":\"Boneless Wings\",\"price\":10.49,\"quantity\":3.0}
-            Item = "\"{ 'ID': '" + count + "', 'name': '" + item + "', 'price': '" + Number.parseFloat(price) + "', 'quantity': '" + Number.parseFloat(amount)+"'}\"";
+          var  Item = "\"{ 'cart_id': 0, 'name': '" + item + "', 'price': " + Number.parseFloat(price) + ", 'quantity': " + Number.parseFloat(amount)+"}\"";
           /*  Item["ID"] = count;
             Item["name"] = item;
             Item["price"] = Number.parseFloat(price);
             Item["quantity"] = Number.parseInt(amount);*/
-            c.log(Item);
-            cart.push(Item);//pushes object in cart array
+            //c.log(Item);
+            //cart.push(Item);//pushes object in cart array
             var promise = ajax("http://localhost/DinerAppAPI/api/Cart", "POST", Item);
-            promise.then(function (data) {
-                c.log(data);
-            });
-        }
+             promise.then(function (data) {
+              callback(data);
+             });
+        
     };
 
 //returns cart array

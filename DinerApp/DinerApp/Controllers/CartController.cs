@@ -14,45 +14,70 @@ namespace DinerApp.WebAPI.Controllers
 { [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class CartController : ApiController
     {
-        static DinerAppDB2Entities db = new DinerAppDB2Entities();
 
         [HttpGet]
         public string GetCart()
         {
+            using (DinerAppDB2Entities db = new DinerAppDB2Entities())
+            { 
+                IEnumerable<CartDTO> cartDTO = (from item in db.Carts
+                                                //join m in db.Menus on item.menu_id equals m.menu_id into members
+                                               where item.Menu.menu_id == item.menu_id
+                                                select new CartDTO()
+                                                {
+                                                    id = item.cart_id,
+                                                    menu_id = item.menu_id,
+                                                    name = item.Menu.name,
+                                                    price = item.Menu.price,
+                                                    quantity = item.quantity
+                                                }).ToList();
 
-            IEnumerable<CartDTO> cartDTO = (from item in db.Carts
-                               join m in db.Menus on item.menu_id equals m.menu_id into members
-                        where item.Menu.menu_id==item.menu_id
-                        select new CartDTO()
-                        { 
-                            id= item.cart_id, name = item.Menu.name, price = item.Menu.price, quantity= item.quantity }
-                        ).ToList();
 
-           
             //IEnumerable<CartDTO> cartDTO = DTOMapper.CartConvertToDTO(cart);
 
             var json = JsonConvert.SerializeObject(cartDTO);
 
             return json;
+            }
         }
 
-        /*[Route("api/Cart/GetItem/{id}")]
-        public IHttpActionResult GetCartItem(int id)
+        [Route("api/Cart/{id}")]
+        public string GetCartItem(int id)
         {
-            /* TouristAttraction touristattraction = db.TouristAttractions.Find(id);
-             if (touristattraction == null)
-             {
-                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-             }
+            using (DinerAppDB2Entities db = new DinerAppDB2Entities())
+            {
 
-             return touristattraction;*/
-        //var cart = Cart.cart.FirstOrDefault((c) => c.ID == id);
-        /*   if (cart == null)
-           {
-               return NotFound();
-           }
-           return Ok(cart);
-       }*/
+
+                /*TouristAttraction touristattraction = db.TouristAttractions.Find(id);
+                 if (touristattraction == null)
+                 {
+                     throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+                 }
+
+                 return touristattraction;*/
+                IEnumerable<CartDTO> item = (from listitem in db.Carts
+                                                 //join m in db.Menus on id equals m.menu_id into members
+                                             where id == listitem.menu_id
+                                             select new CartDTO()
+                                             {
+                                                id = listitem.cart_id,
+                                                menu_id = listitem.menu_id,
+                                                name = listitem.Menu.name,
+                                                price =listitem.Menu.price,
+                                                quantity = listitem.quantity
+                                             });
+                //var item = db.Carts.FirstOrDefault((c) => c.menu_id == id);
+                if (item == null)
+                {
+                    return "Not Found";
+                }
+
+                var json = JsonConvert.SerializeObject(item);
+
+                return json;
+              
+            }
+       }
 
         //need for cart async
         [HttpDelete]
@@ -76,10 +101,50 @@ namespace DinerApp.WebAPI.Controllers
         //[Route("api/AddItem")]
         public IHttpActionResult PostAddItem([FromBody]string data)
         {
-            CartDAO C = JsonConvert.DeserializeObject<CartDAO>(data);
-          // Cart.cart.Add( new CartDAO(C.ID,C.Name, C.Price,C.Quantity));
-           
-            return Ok(C);
+            using (DinerAppDB2Entities db = new DinerAppDB2Entities())
+            {
+                Cart cart= new Cart();
+
+               
+                CartDTO C = JsonConvert.DeserializeObject<CartDTO>(data);
+                //gets menu_id from Menu
+                var menu_id = (from item in db.Menus
+                         where C.name == item.name
+                         select item.menu_id).SingleOrDefault();
+
+
+              
+                bool Exist = false;
+
+                    Exist = db.Carts.Any(r => r.menu_id.Equals(menu_id));
+
+                     if (Exist)
+                    {
+                    var row = (from item in db.Carts
+                               where menu_id == item.menu_id
+                               select item).Single();
+
+                   
+                        row.quantity += C.quantity;
+                        db.SaveChanges();
+                
+                    }
+
+                
+                if (Exist == false)
+                {
+                    cart = new Cart()
+                    {
+                        menu_id = menu_id,
+                        quantity = C.quantity
+                    };
+
+                    db.Carts.Add(cart);
+                    db.SaveChanges();
+                }
+
+                return Ok(Exist);
+            }
         }
 
     }

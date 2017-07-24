@@ -42,13 +42,6 @@ var getMenu = function (callback){
    callback(JSON.parse(data));
  });
 
-//     $.ajax("http://localhost/DinerAppAPI/api/Menu",{
-//     method: "GET",
-//     //data: menuItems
-// }).then(function(data){
-//     callback(data);
-// });
-
 };
 
 

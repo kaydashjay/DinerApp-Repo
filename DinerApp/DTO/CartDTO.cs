@@ -21,11 +21,14 @@ namespace DTO
         public decimal price { get; set; }
         [DataMember]
         public int id { get; set; }
+        [DataMember]
+        public int menu_id { get; set; }
 
         public CartDTO() { }
-        public CartDTO(int id,string name, decimal price, int q)
+        public CartDTO(int id, int menu_id,string name, decimal price, int q)
         {
             this.id = id;
+            this.menu_id = menu_id;
             this.price = price;
             this.name = name;
             quantity = q;

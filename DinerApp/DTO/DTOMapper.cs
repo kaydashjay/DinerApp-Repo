@@ -23,7 +23,7 @@ namespace DTO
         //CART MAPPING
         public static CartDTO CartConvertToDTO(this Cart data)
         {
-            return new CartDTO(data.cart_id, data.Menu.name, data.Menu.price, data.quantity);
+            return new CartDTO(data.cart_id,data.menu_id, data.Menu.name, data.Menu.price, data.quantity);
 
         }
         public static IEnumerable<CartDTO> CartConvertToDTO(this IEnumerable<Cart> data)
