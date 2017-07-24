@@ -79,9 +79,12 @@ window.cart = (function(){
     };
 
 //update the quantity of an item
-    function updateItem(name, quantity){
+    function updateItem(name, quantity, callback){
         var item = "\"{'name':'"+name+"', 'quantity':"+Number.parseInt(quantity)+"}\"";
         var promise = ajax("http://localhost/DinerAppAPI/api/Cart", "PUT", item);
+        promise.then (function (){
+            callback();
+        })
     };
 
 //removes item from array
@@ -116,7 +119,13 @@ window.cart = (function(){
     function getTotal(callback){
          var promise = ajax("http://localhost/DinerAppAPI/api/Cart/GetTotal", "GET", null);
          promise.then(function (data){
+             if (data ==null){
+                 data = "0.00";
+                 callback(data);
+             }
+                else{
             callback(data.toFixed(2));
+                }
         });
     }
     

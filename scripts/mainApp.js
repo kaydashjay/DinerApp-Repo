@@ -200,10 +200,15 @@ var d = document;
             if (event.target.innerText == "Update") {
                 var amount = event.target.parentNode.childNodes[3].childNodes[1];
                 //updates cart DB
-                Cart.updateItem(food.nodeValue, amount.value, function (){;}); 
-                Cart.getTotal(function (total){
-                    totalP.innerText = "$" + total;  
-                }); 
+                //c.log(amount.value);
+                Cart.updateItem(food.nodeValue, amount.value, function (){
+                    Cart.getTotal(function (total){
+                    totalP.innerText = "$" + total;
+                    c.log(total);  
+                })
+                });
+                
+           
                 var updateButton = event.target.parentNode.childNodes[2];
                     updateButton.className = "btn btn-default";
             }
@@ -213,12 +218,7 @@ var d = document;
                 if (confirm("Click OK if you are sure you want to delete " + food.nodeValue + "?")) {
                     Cart.removeItem(food.nodeValue, function (){
                         Cart.getTotal(function (total){
-                            if (total == null){
-                             totalP.innerText = "$0.00"; //set initial value of total
-                            }
-                            else {
                             totalP.innerText = "$" + total; //deletes item from cart array and then gets the total
-                            }
                         event.target.parentNode.remove(); //removes from display 
                        
             });//update the displayed total 
