@@ -172,7 +172,7 @@ namespace DinerApp.WebAPI.Controllers
                    
                         row.quantity += C.quantity;
                         db.SaveChanges();
-                    return Ok(row);
+                    return Ok(row.quantity);
                 
                     }
 

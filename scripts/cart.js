@@ -13,7 +13,9 @@ window.cart = (function(){
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200 || xhr.status === 201) {
+                        //c.log(xhr.responseText);
                         resolve(JSON.parse(xhr.responseText));
+
                     } else {
                         reject(Error(xhr.status + " " + xhr.statusText));
                     }
@@ -116,7 +118,7 @@ window.cart = (function(){
     function getTotal(callback){
          var promise = ajax("http://localhost/DinerAppAPI/api/Cart/GetTotal", "GET", null);
          promise.then(function (data){
-            callback(data.toFixed(2));
+            callback(data);
         });
     }
     

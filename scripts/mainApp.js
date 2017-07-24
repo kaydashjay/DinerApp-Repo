@@ -17,7 +17,7 @@ var d = document;
         var message = d.getElementById("msg"); //"Cart is empty" message
     
         var totalP = d.getElementById("total");
-        total.innerText = "$0.00"; //set initial value of total
+        totalP.innerText = "$0.00"; //set initial value of total
 
         function inDOMcart(name) {
             for (var i = 3; i < cart.childNodes.length; i++) {
@@ -88,6 +88,9 @@ var d = document;
             amount.value = quantity;
             amount.min = 1;
 
+            var price = li.childNodes[2].childNodes[0].nodeValue;
+            li.childNodes[2].childNodes[0].nodeValue = "$"+price;
+
             //grabs the deleteButton that deletes the item from the cart
             //assigns styling
             var deleteButton = li.childNodes[1];
@@ -119,7 +122,7 @@ var d = document;
             //creates amount input element for the quantity    
             var amount = d.createElement("input");
             amount.type = "number";
-            amount.style = "width :2em;margin-left: 15px; color: #343434;";
+            amount.style = "width :3em;margin-left: 15px; color: #343434;";
             amount.min = 0;
             amount.max = 20;
 
@@ -159,14 +162,17 @@ var d = document;
         }
         //creats cart list items
         function createCartLi(listItem) {
-         c.log(listItem);
           var li = CreateLi(listItem[0]['name'], listItem[0].price);//creats the list item
            Cart.getTotal(function (total){
+               c.log (total);
                  totalP.innerText = "$" + total;
             }); //display the updated total when item added to cart
             var amount = li.childNodes[2].childNodes[1]//grabs amount input element    
             amount.value = listItem[0].quantity;
             amount.min = 1;
+
+            var price = li.childNodes[2].childNodes[0].nodeValue;
+            li.childNodes[2].childNodes[0].nodeValue = "$" + price; //adds the $ sign while keeping the original price value as a number
 
             //grabs the deleteButton that deletes the item from the cart
             //assigns styling
@@ -195,13 +201,19 @@ var d = document;
                 if (confirm("Click OK if you are sure you want to delete " + food.nodeValue + "?")) {
                     Cart.removeItem(food.nodeValue, function (){
                         Cart.getTotal(function (total){
-                        totalP.innerText = "$" + total;}); //deletes item from cart array and then gets the total
-                        event.target.parentNode.remove(); //removes from display
-                    
+                            if (total == null){
+                             totalP.innerText = "$0.00"; //set initial value of total
+                            }
+                            else {
+                            totalP.innerText = "$" + total; //deletes item from cart array and then gets the total
+                            }
+                        event.target.parentNode.remove(); //removes from display 
+                       
             });//update the displayed total 
-                }
+                });
                 if (Cart.isEmpty()) {
                     message.style.display = "block";//display message if caret empty
+                    //totalP.innerText = "$0.00"; //set initial value of total
                     checkoutButton.disabled = true;
                 }
             }
@@ -210,12 +222,13 @@ var d = document;
                 var amount = event.target.parentNode.childNodes[3].childNodes[1];
                 //updates cart DB
                 Cart.updateItem(food.nodeValue, amount.value, function (){
-                    ;
-                }); 
-                var updateButton = event.target.parentNode.childNodes[2];
+                    var updateButton = event.target.parentNode.childNodes[2];
                 updateButton.className = "btn btn-default";
                 Cart.getTotal(function (total){
                     totalP.innerText = "$" + total;}); //update displayed total
+                }); 
+                
+            }
                 
             }
         });
@@ -239,49 +252,62 @@ var d = document;
                     alert("Enter amount");
                 }
                 else {
-                    if (Cart.inCart(food.nodeValue)) {
-                        Cart.addItem(food.nodeValue, price, amount.value);
-                        var cartItem = getDOMcartItem(food.nodeValue);
-                        var cartQ = Number.parseInt(cartItem.childNodes[3].childNodes[1].value);
-                        var quantity = Number.parseInt(amount.value);
-                        cartItem.childNodes[3].childNodes[1].value = quantity + cartQ;
-                        Cart.getTotal(function (total){
-                            totalP.innerText = "$" + total;}); //display the updated total when item added to cart
-                        amount.value = 0;
-                    }
-                    else {
+                    // if (Cart.inCart(food.nodeValue)) {
+                    //     Cart.addItem(food.nodeValue, price, amount.value);
+                    //     var cartItem = getDOMcartItem(food.nodeValue);
+                    //     var cartQ = Number.parseInt(cartItem.childNodes[3].childNodes[1].value);
+                    //     var quantity = Number.parseInt(amount.value);
+                    //     cartItem.childNodes[3].childNodes[1].value = quantity + cartQ;
+                    //     Cart.getTotal(function (total){
+                    //         totalP.innerText = "$" + total;}); //display the updated total when item added to cart
+                    //         amount.value = 0;
+                    // }
+                    // else 
+                    
                         
                         //add item to cart array
                         Cart.addItem(food.nodeValue, price, amount.value, function () {
                             // cart.childNodes.forEach( function (item){
                             //     item.remove();
-                            Cart.getCart(function (c) {
+                            
+                            Cart.getCart(function (data) {
                             //go through cart array and add to DOM
-                            c.forEach(function (item, i) {
+                            for(var i = 0 ; i<data.length; i++){
                                // if item already in DOM and the quantity in DOM and cart are different, make DOM = cart quantity
-                                   if (inDOMcart(item["name"])){
-                                        var li = getDOMcartItem(item["name"]);
-                                        //if (Number.parseInt(li.childNodes[3].childNodes[1].value)!=item["quantity"]){
+                               if(data[i].name == food.nodeValue){
+                                   if (inDOMcart(food.nodeValue) ){
+                                        var li = getDOMcartItem(food.nodeValue);
                                             var q = Number.parseInt(li.childNodes[3].childNodes[1].value);
-                                            q+=amount.value;
+                                            var a = Number.parseInt(amount.value);
+                                            q+=a;
                                             li.childNodes[3].childNodes[1].value =q;
-                                        //}
+                                            amount.value = 0;
+                                        message.style.display = "none";
+                                        checkoutButton.disabled = false;
+                                         Cart.getTotal(function (total){
+                                            totalP.innerText = "$" + total;}); //update displayed total
+                                            break;
                                     }
-                                 else {
-                                    Cart.getItem (item["menu_id"], function(data){
+                        
+                                else{
+                                    Cart.getItem (data[i]["menu_id"], function(data){
                                         cart.appendChild(createCartLi(data));//append the new items that aren't in the cart array
-
+                                        amount.value = 0;
+                                        message.style.display = "none";
+                                        checkoutButton.disabled = false;
                                     });
                                 }
-                            }, this);
+                                
+                               }
+                                   
+                            }
+
                         });        
                             });
                             
                       
-                amount.value = 0;
-                            message.style.display = "none";
-                            checkoutButton.disabled = false;
-                    }
+                
+                    
                 }
             }
         });
