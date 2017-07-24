@@ -240,33 +240,32 @@ var d = document;
                     else {
                         
                         //add item to cart array
-                        Cart.addItem(food.nodeValue, price, amount.value, function (item) {
-                            cart.childNodes.forEach( function (item){
-                                item.remove();
-                            });
-                             Cart.getCart(function (cart) {
+                        Cart.addItem(food.nodeValue, price, amount.value, function () {
+                            // cart.childNodes.forEach( function (item){
+                            //     item.remove();
+                            Cart.getCart(function (c) {
                             //go through cart array and add to DOM
-                            cart.forEach(function (item, i) {
-                                //if item already in DOM and the quantity in DOM and cart are different, make DOM = cart quantity
-                                //  if (inDOMcart(item["name"])) {
-                                //      var li = getDOMcartItem(item["name"]);
-                                   
-                                //         var q = Number.parseInt(li.childNodes[3].childNodes[1].value); 
-                                //          q+= item["quantity"];
-                                //          li.childNodes[3].childNodes[1].value = q; 
+                            c.forEach(function (item, i) {
+                               // if item already in DOM and the quantity in DOM and cart are different, make DOM = cart quantity
+                                   if (inDOMcart(item["name"])){
+                                        var li = getDOMcartItem(item["name"]);
+                                        if (Number.parseInt(li.childNodes[3].childNodes[1].value)!=item["quantity"]){
+                                            li.childNodes[3].childNodes[1].value =item["quantity"]
+                                        }
+                                    }
 
-
-                                   
-                                //  }
-                                //  else {
+                            
+                                 else {
                                     Cart.getItem (item["menu_id"], function(data){
                                         cart.appendChild(createCartLi(data));//append the new items that aren't in the cart array
 
                                     });
-                                //}
+                                }
                             }, this);
                         });        
-                        });
+                            });
+                            
+                      
                 amount.value = 0;
                             message.style.display = "none";
                             checkoutButton.disabled = false;

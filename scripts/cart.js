@@ -27,25 +27,12 @@ window.cart = (function(){
         });
     }
 
-//gets the item object
+//gets the item by menuID
     function getItem(id, callback){
         var promise = ajax("http://localhost/DinerAppAPI/api/Cart/"+id+"/", "GET", null);
          promise.then(function (data){
             callback(JSON.parse(data));
-            //JSON.parse(data)
-    //         if (data){
-    //         return ;
-    //         }
-    //     else{
-    //    c.log(name + " Not in cart");
-    //     }
         })
-        // for (var i=0; i<cart.length;i++){
-        //     if(cart[i]["name"]==name)
-        //     {
-        //         return  cart[i];
-        //     }
-        // }
     };
 
 //checks if item is in the cart array
@@ -71,22 +58,13 @@ window.cart = (function(){
 
 //adds item to cart array
     function addItem(item, price, amount, callback){
-            //creats item object
-            
-            
-           // \"name\":\"Boneless Wings\",\"price\":10.49,\"quantity\":3.0}
+            //creats strings of object
           var  Item = "\"{ 'cart_id': 0, 'name': '" + item + "', 'price': " + Number.parseFloat(price) + ", 'quantity': " + Number.parseFloat(amount)+"}\"";
-          /*  Item["ID"] = count;
-            Item["name"] = item;
-            Item["price"] = Number.parseFloat(price);
-            Item["quantity"] = Number.parseInt(amount);*/
-            //c.log(Item);
-            //cart.push(Item);//pushes object in cart array
             var promise = ajax("http://localhost/DinerAppAPI/api/Cart", "POST", Item);
-             promise.then(function (data) {
-              callback(data);
-             });
-        
+              promise.then(function () {
+                  //once post is done
+               callback();
+              });
     };
 
 //returns cart array
@@ -105,10 +83,14 @@ window.cart = (function(){
     };
 
 //removes item from array
-    function removeItem(name){
-        var item = getItem(name); //gets item object
-        var i = cart.indexOf(item); //gets the objects index in the cart array
-        cart.splice(i,1);//at position i delete 1 
+    function removeItem(id){
+        getItem(id, function (item){
+            var promise = ajax("http://localhost/DinerAppAPI/api/Cart/"+id+"/", "DELETE", null);
+            promise.then(function (data){
+                c.log(data);
+            })
+        }
+        ); //gets item object
     };
 
 //loads cart

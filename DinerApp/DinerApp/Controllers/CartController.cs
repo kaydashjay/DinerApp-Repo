@@ -46,15 +46,6 @@ namespace DinerApp.WebAPI.Controllers
         {
             using (DinerAppDB2Entities db = new DinerAppDB2Entities())
             {
-
-
-                /*TouristAttraction touristattraction = db.TouristAttractions.Find(id);
-                 if (touristattraction == null)
-                 {
-                     throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-                 }
-
-                 return touristattraction;*/
                 IEnumerable<CartDTO> item = (from listitem in db.Carts
                                                  //join m in db.Menus on id equals m.menu_id into members
                                              where id == listitem.menu_id
@@ -66,7 +57,6 @@ namespace DinerApp.WebAPI.Controllers
                                                 price =listitem.Menu.price,
                                                 quantity = listitem.quantity
                                              });
-                //var item = db.Carts.FirstOrDefault((c) => c.menu_id == id);
                 if (item == null)
                 {
                     return "Not Found";
@@ -81,20 +71,24 @@ namespace DinerApp.WebAPI.Controllers
 
         //need for cart async
         [HttpDelete]
-        [Route("api/Delete/{index}")]
-        public IHttpActionResult DeleteCartItemAtIndex(int index)
+        [Route("api/Cart/{id}")]
+        public IHttpActionResult DeleteCartItemByID(int id)
         {
-            try
+            using (DinerAppDB2Entities db = new DinerAppDB2Entities())
             {
-               // Cart.cart.RemoveAt(index);
+                try
+                {
+                    var row = (from items in db)
+                Cart.cart.RemoveAt(index);
+                }
+                catch (ArgumentOutOfRangeException e)
+                {
+                    //log the exception e.Message
+                    return BadRequest("The index is out of range");
+                }
+                return null;
+                //return Ok(Cart.cart);
             }
-            catch (ArgumentOutOfRangeException e)
-            {
-                //log the exception e.Message
-                return BadRequest("The index is out of range");
-            }
-            return null;
-            //return Ok(Cart.cart);
         }
 
         [HttpPost]
@@ -104,16 +98,12 @@ namespace DinerApp.WebAPI.Controllers
             using (DinerAppDB2Entities db = new DinerAppDB2Entities())
             {
                 Cart cart= new Cart();
-
-               
                 CartDTO C = JsonConvert.DeserializeObject<CartDTO>(data);
                 //gets menu_id from Menu
                 var menu_id = (from item in db.Menus
                          where C.name == item.name
                          select item.menu_id).SingleOrDefault();
 
-
-              
                 bool Exist = false;
 
                     Exist = db.Carts.Any(r => r.menu_id.Equals(menu_id));
@@ -123,10 +113,11 @@ namespace DinerApp.WebAPI.Controllers
                     var row = (from item in db.Carts
                                where menu_id == item.menu_id
                                select item).Single();
-
+                   
                    
                         row.quantity += C.quantity;
                         db.SaveChanges();
+                    return Ok(row);
                 
                     }
 
@@ -141,9 +132,10 @@ namespace DinerApp.WebAPI.Controllers
 
                     db.Carts.Add(cart);
                     db.SaveChanges();
+                    return Ok(cart);
                 }
-
-                return Ok(Exist);
+                return Ok();
+                
             }
         }
 
