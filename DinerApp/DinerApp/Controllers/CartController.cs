@@ -71,23 +71,27 @@ namespace DinerApp.WebAPI.Controllers
 
         //need for cart async
         [HttpDelete]
-        [Route("api/Cart/{id}")]
-        public IHttpActionResult DeleteCartItemByID(int id)
+        [Route("api/Cart/{name}")]
+        public IHttpActionResult DeleteCartItemByID(string name)
         {
             using (DinerAppDB2Entities db = new DinerAppDB2Entities())
             {
                 try
                 {
-                    var row = (from items in db)
-                Cart.cart.RemoveAt(index);
+                    var row = (from item in db.Carts
+                               where name == item.Menu.name
+                               select item).Single();
+
+                   
+                    db.Carts.Remove(row);
+                    db.SaveChanges();
+                    return Ok(row);
                 }
                 catch (ArgumentOutOfRangeException e)
                 {
                     //log the exception e.Message
-                    return BadRequest("The index is out of range");
+                    return BadRequest("The item is not in the Cart");
                 }
-                return null;
-                //return Ok(Cart.cart);
             }
         }
 

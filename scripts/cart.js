@@ -83,14 +83,14 @@ window.cart = (function(){
     };
 
 //removes item from array
-    function removeItem(id){
-        getItem(id, function (item){
-            var promise = ajax("http://localhost/DinerAppAPI/api/Cart/"+id+"/", "DELETE", null);
-            promise.then(function (data){
-                c.log(data);
-            })
-        }
-        ); //gets item object
+    function removeItem(name){
+        
+            var promise = ajax("http://localhost/DinerAppAPI/api/Cart/"+name+"/", "DELETE", null);
+            // promise.then(function (data){
+            //     c.log(data);
+            // });
+        
+       
     };
 
 //loads cart
