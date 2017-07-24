@@ -59,7 +59,7 @@ window.cart = (function(){
 //adds item to cart array
     function addItem(item, price, amount, callback){
             //creats strings of object
-          var  Item = "\"{ 'cart_id': 0, 'name': '" + item + "', 'price': " + Number.parseFloat(price) + ", 'quantity': " + Number.parseFloat(amount)+"}\"";
+          var  Item = "\"{ 'cart_id': 0, 'name': '" + item + "', 'price': " + Number.parseFloat(price) + ", 'quantity': " + Number.parseInt(amount)+"}\"";
             var promise = ajax("http://localhost/DinerAppAPI/api/Cart", "POST", Item);
               promise.then(function () {
                   //once post is done
@@ -78,17 +78,19 @@ window.cart = (function(){
 
 //update the quantity of an item
     function updateItem(name, quantity){
-        var item = getItem(name); //gets item object
-            item["quantity"]=quantity; //updates quantity
+        var item = "\"{'name':'"+name+"', 'quantity':"+Number.parseInt(quantity)+"}\"";
+        var promise = ajax("http://localhost/DinerAppAPI/api/Cart", "PUT", item);
+        // var item = getItem(name); //gets item object
+        //     item["quantity"]=quantity; //updates quantity
     };
 
 //removes item from array
-    function removeItem(name){
+    function removeItem(name, callback){
         
             var promise = ajax("http://localhost/DinerAppAPI/api/Cart/"+name+"/", "DELETE", null);
-            // promise.then(function (data){
-            //     c.log(data);
-            // });
+            promise.then(function (data){
+                callback();
+            });
         
        
     };
@@ -111,12 +113,11 @@ window.cart = (function(){
 //     };
 
     //returns the total
-    function getTotal(){
-        var total=0;
-        for (var i = 0; i<cart.length; i++){
-            total += (cart[i]["price"] * cart[i]["quantity"]);
-        }
-        return total.toFixed(2);  
+    function getTotal(callback){
+         var promise = ajax("http://localhost/DinerAppAPI/api/Cart/GetTotal", "GET", null);
+         promise.then(function (data){
+            callback(data.toFixed(2));
+        });
     }
     
     return {

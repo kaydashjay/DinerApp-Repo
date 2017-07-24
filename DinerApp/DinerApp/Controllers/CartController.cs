@@ -9,6 +9,7 @@ using DTO;
 using DAO;
 using System.Web.Http.Cors;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace DinerApp.WebAPI.Controllers
 { [EnableCors(origins: "*", headers: "*", methods: "*")]
@@ -40,6 +41,32 @@ namespace DinerApp.WebAPI.Controllers
             return json;
             }
         }
+        [Route("api/Cart/GetTotal")]
+        public decimal? GetTotal()
+        {
+            using (DinerAppDB2Entities db = new DinerAppDB2Entities())
+            {
+                var total = db.GetTotal().Single();
+
+                /*IEnumerable<CartDTO> cartDTO = (from item in db.Carts
+                                                    //join m in db.Menus on item.menu_id equals m.menu_id into members
+                                                where item.Menu.menu_id == item.menu_id
+                                                select new CartDTO()
+                                                {
+                                                    id = item.cart_id,
+                                                    menu_id = item.menu_id,
+                                                    name = item.Menu.name,
+                                                    price = item.Menu.price,
+                                                    quantity = item.quantity
+                                                }).ToList();*/
+
+
+                //IEnumerable<CartDTO> cartDTO = DTOMapper.CartConvertToDTO(cart);
+
+
+                return total;
+            }
+        }
 
         [Route("api/Cart/{id}")]
         public string GetCartItem(int id)
@@ -68,6 +95,30 @@ namespace DinerApp.WebAPI.Controllers
               
             }
        }
+        [HttpPut]
+       // [Route("api/Cart/{name}")]
+        public IHttpActionResult UpdateCartItem([FromBody]string data)
+        {
+            using (DinerAppDB2Entities db = new DinerAppDB2Entities())
+            {
+                var cart = JObject.Parse(data);
+                var name = (string)cart["name"];
+                //gets the record that needs to be updated
+                var item = (from listitem in db.Carts
+                                //join m in db.Menus on id equals m.menu_id into members
+                            where name ==listitem.Menu.name
+                            select listitem).Single();
+                
+                if (item == null) 
+                {
+                    return NotFound();
+                }
+
+                item.quantity = (int)cart["quantity"];
+                db.SaveChanges();
+                return Ok();
+            }
+        }
 
         //need for cart async
         [HttpDelete]

@@ -16,7 +16,7 @@ var d = document;
         var checkoutButton = d.getElementById("checkout");
         var message = d.getElementById("msg"); //"Cart is empty" message
     
-        var total = d.getElementById("total");
+        var totalP = d.getElementById("total");
         total.innerText = "$0.00"; //set initial value of total
 
         function inDOMcart(name) {
@@ -82,7 +82,8 @@ var d = document;
          });
         function createCartLit(item, price, quantity) {
             var li = CreateLi(item,price );//creats the list item
-            total.innerText = "$" + Cart.getTotal(); //display the updated total when item added to cart
+            Cart.getTotal(function (total){
+                 totalP.innerHTML = "$" + total}); //display the updated total when item added to cart
             var amount = li.childNodes[2].childNodes[1]//grabs amount input element    
             amount.value = quantity;
             amount.min = 1;
@@ -160,7 +161,9 @@ var d = document;
         function createCartLi(listItem) {
          c.log(listItem);
           var li = CreateLi(listItem[0]['name'], listItem[0].price);//creats the list item
-            total.innerText = "$" + Cart.getTotal(); //display the updated total when item added to cart
+           Cart.getTotal(function (total){
+                 totalP.innerText = "$" + total;
+            }); //display the updated total when item added to cart
             var amount = li.childNodes[2].childNodes[1]//grabs amount input element    
             amount.value = listItem[0].quantity;
             amount.min = 1;
@@ -190,9 +193,12 @@ var d = document;
             var food = event.target.parentNode.childNodes[0];
             if (event.target.innerText == "Delete") {
                 if (confirm("Click OK if you are sure you want to delete " + food.nodeValue + "?")) {
-                    Cart.removeItem(food.nodeValue); //deletes item from cart array
-                    event.target.parentNode.remove(); //removes from display
-                    total.innerText = "$" + Cart.getTotal();//update the displayed total 
+                    Cart.removeItem(food.nodeValue, function (){
+                        Cart.getTotal(function (total){
+                        totalP.innerText = "$" + total;}); //deletes item from cart array and then gets the total
+                        event.target.parentNode.remove(); //removes from display
+                    
+            });//update the displayed total 
                 }
                 if (Cart.isEmpty()) {
                     message.style.display = "block";//display message if caret empty
@@ -202,10 +208,15 @@ var d = document;
             //event handling for update button of each newly added item
             if (event.target.innerText == "Update") {
                 var amount = event.target.parentNode.childNodes[3].childNodes[1];
-                Cart.updateItem(food.nodeValue, amount.value); //updates cart array
+                //updates cart DB
+                Cart.updateItem(food.nodeValue, amount.value, function (){
+                    ;
+                }); 
                 var updateButton = event.target.parentNode.childNodes[2];
                 updateButton.className = "btn btn-default";
-                total.innerText = "$" + Cart.getTotal(); //update displayed total
+                Cart.getTotal(function (total){
+                    totalP.innerText = "$" + total;}); //update displayed total
+                
             }
         });
 
@@ -234,7 +245,8 @@ var d = document;
                         var cartQ = Number.parseInt(cartItem.childNodes[3].childNodes[1].value);
                         var quantity = Number.parseInt(amount.value);
                         cartItem.childNodes[3].childNodes[1].value = quantity + cartQ;
-                        total.innerText = "$" + Cart.getTotal(); //display the updated total when item added to cart
+                        Cart.getTotal(function (total){
+                            totalP.innerText = "$" + total;}); //display the updated total when item added to cart
                         amount.value = 0;
                     }
                     else {
@@ -249,12 +261,12 @@ var d = document;
                                // if item already in DOM and the quantity in DOM and cart are different, make DOM = cart quantity
                                    if (inDOMcart(item["name"])){
                                         var li = getDOMcartItem(item["name"]);
-                                        if (Number.parseInt(li.childNodes[3].childNodes[1].value)!=item["quantity"]){
-                                            li.childNodes[3].childNodes[1].value =item["quantity"]
-                                        }
+                                        //if (Number.parseInt(li.childNodes[3].childNodes[1].value)!=item["quantity"]){
+                                            var q = Number.parseInt(li.childNodes[3].childNodes[1].value);
+                                            q+=amount.value;
+                                            li.childNodes[3].childNodes[1].value =q;
+                                        //}
                                     }
-
-                            
                                  else {
                                     Cart.getItem (item["menu_id"], function(data){
                                         cart.appendChild(createCartLi(data));//append the new items that aren't in the cart array
