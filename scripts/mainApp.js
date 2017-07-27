@@ -15,7 +15,8 @@ var d = document;
         var burgers = d.getElementById("burgers");
         var checkoutButton = d.getElementById("checkout");
         var message = d.getElementById("msg"); //"Cart is empty" message
-    
+        var saveMenuItemModal = d.getElementById("addMenuItem");
+
         var totalP = d.getElementById("total");
         totalP.innerText = "$0.00"; //set initial value of total
 
@@ -37,39 +38,57 @@ var d = document;
             c.log("Cant find " + name + " in cart DOM");
         }
         //grabs the menu from json file
-        Menu.getMenu(function (data) {
+        getMenu();
+        function getMenu(){
+            Menu.getMenu(function (data) {
             //show appetizers     
             for (var i = 0; i < data.length; i++) {
                 if (data[i].cat == 1) {
                     var name = data[i].name;
-                    var price = data[i].price;
+                    var price = data[i].price.toFixed(2);
                     apps.appendChild(createMenuLi(name, price));
                 }
                 //show salads
                 if (data[i].cat == 4) {
                     var name = data[i].name;
-                    var price = data[i].price;
+                    var price = data[i].price.toFixed(2);
                     salads.appendChild(createMenuLi(name, price));
                 }
                 //show chicken dishes
                 if (data[i].cat == 2) {
                     var name = data[i].name;
-                    var price = data[i].price;
+                    var price = data[i].price.toFixed(2);
                     chicken.appendChild(createMenuLi(name, price));
                 }
                 //show burgers
                 if (data[i].cat == 3) {
                     var name = data[i].name;
-                    var price = data[i].price;
+                    var price = data[i].price.toFixed(2);
                     burgers.appendChild(createMenuLi(name, price));
                 }
             }
         });
+        }
+        
+        
+ /******************ADD MENU ITEM******************** */
+        saveMenuItemModal.addEventListener("click", function (event) {
+            c.log(event.target.innerHTML);
+        if (event.target.innerText == "Save changes"){
+            var name = d.getElementById("Name");
+            var price = d.getElementById("Price");
+            var category = d.getElementById("category");
 
+                Menu.addItem(name.value, price.value, category.value, function (){
+                    alert("Successfully added "+name.value+" to the menu");
+                    getMenu();
+                });
+         }
+        });
         //gets user information from user.js
         User.getUser(function (data) {
 
-            var userText = "Welcome " + data[0].fname + "! Here is your cart!<br> Your shipping address is: <br>" + data[0].street + "<br>" + data[0].city + ", " + data[0].state + " " + data[0].zip;
+            var userText = "Welcome " + data.fname + "! Here is your cart!<br> Your shipping address is: <br>" + data.street + "<br>" + data.city + ", " + data.state + " " + data.zip;
             userinfo.innerHTML = userText;
         });
 
@@ -143,9 +162,7 @@ var d = document;
 
             return li;
         }
-        function getItemData(data){
-            return data;
-        }
+       
 
         //creates menu items and all of its components and event handling
         function createMenuLi(item, cost) {
@@ -200,11 +217,9 @@ var d = document;
             if (event.target.innerText == "Update") {
                 var amount = event.target.parentNode.childNodes[3].childNodes[1];
                 //updates cart DB
-                //c.log(amount.value);
                 Cart.updateItem(food.nodeValue, amount.value, function (){
                     Cart.getTotal(function (total){
                     totalP.innerText = "$" + total;
-                    c.log(total);  
                 })
                 });
                 
@@ -220,18 +235,14 @@ var d = document;
                         Cart.getTotal(function (total){
                             totalP.innerText = "$" + total; //deletes item from cart array and then gets the total
                         event.target.parentNode.remove(); //removes from display 
-                       
             });//update the displayed total 
                 });
                 if (Cart.isEmpty()) {
                     message.style.display = "block";//display message if caret empty
-                    //totalP.innerText = "$0.00"; //set initial value of total
                     checkoutButton.disabled = true;
                 }
                 }
-           
             }
-            
         });
 
         //event handling for when the quantity changes of each newly added item
@@ -241,8 +252,10 @@ var d = document;
         });
 
         //MENU EVENT HANDLING
+       
         //for click
         menu.addEventListener("click", function (event) {
+            
             /*****************ADD TO CART********************* */
             //event handling for add button of each newly added item
             if (event.target.innerText == "Add to Cart") {
@@ -254,24 +267,8 @@ var d = document;
                     alert("Enter amount");
                 }
                 else {
-                    // if (Cart.inCart(food.nodeValue)) {
-                    //     Cart.addItem(food.nodeValue, price, amount.value);
-                    //     var cartItem = getDOMcartItem(food.nodeValue);
-                    //     var cartQ = Number.parseInt(cartItem.childNodes[3].childNodes[1].value);
-                    //     var quantity = Number.parseInt(amount.value);
-                    //     cartItem.childNodes[3].childNodes[1].value = quantity + cartQ;
-                    //     Cart.getTotal(function (total){
-                    //         totalP.innerText = "$" + total;}); //display the updated total when item added to cart
-                    //         amount.value = 0;
-                    // }
-                    // else 
-                    
-                        
                         //add item to cart array
                         Cart.addItem(food.nodeValue, price, amount.value, function () {
-                            // cart.childNodes.forEach( function (item){
-                            //     item.remove();
-                            
                             Cart.getCart(function (data) {
                             //go through cart array and add to DOM
                             for(var i = 0 ; i<data.length; i++){
@@ -282,6 +279,10 @@ var d = document;
                                             var q = Number.parseInt(li.childNodes[3].childNodes[1].value);
                                             var a = Number.parseInt(amount.value);
                                             q+=a;
+                                            if (q>20){
+                                                alert("Your amount exceeds 20; You can only get 20 of each item. YOUR ITEM WILL BE SET TO 20.");
+                                                q=20;
+                                            }
                                             li.childNodes[3].childNodes[1].value =q;
                                             amount.value = 0;
                                         message.style.display = "none";

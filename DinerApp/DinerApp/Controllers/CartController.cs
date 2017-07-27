@@ -73,7 +73,7 @@ namespace DinerApp.WebAPI.Controllers
         {
             using (DinerAppDB2Entities db = new DinerAppDB2Entities())
             {
-                IEnumerable<CartDTO> item = (from listitem in db.Carts
+                CartDTO item = (from listitem in db.Carts
                                                  //join m in db.Menus on id equals m.menu_id into members
                                              where id == listitem.menu_id
                                              select new CartDTO()
@@ -83,7 +83,7 @@ namespace DinerApp.WebAPI.Controllers
                                                 name = listitem.Menu.name,
                                                 price =listitem.Menu.price,
                                                 quantity = listitem.quantity
-                                             });
+                                             }).Single();
                 if (item == null)
                 {
                     return "Not Found";
@@ -171,6 +171,10 @@ namespace DinerApp.WebAPI.Controllers
                    
                    
                         row.quantity += C.quantity;
+                    if (row.quantity > 20)
+                    {
+                        row.quantity = 20;
+                    }
                         db.SaveChanges();
                     return Ok(row.quantity);
                 

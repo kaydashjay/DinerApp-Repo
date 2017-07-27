@@ -16,19 +16,43 @@ namespace DinerApp.Controllers
     [EnableCors(origins:"*", headers: "*", methods: "*")]
     public class UserController : ApiController
     {
-        static DinerAppDB2Entities db = new DinerAppDB2Entities();
 
         [HttpGet]
-        public string GetUser()
+        [Route("api/User/{name}")]
+        public string GetUser(string name)
         {
-            var user = (from item in db.Users
-                        select item).ToList();
+            using (DinerAppDB2Entities db = new DinerAppDB2Entities())
+            {
+                try
+                {
+                    var user = (from item in db.Users
+                                where name == item.username
+                                select new UserDTO()
+                                {
+                                    username = item.username,
+                                    password = item.password,
+                                    fname = item.fname,
+                                    lname = item.lname,
+                                    street = item.street,
+                                    city = item.city,
+                                    state = item.state,
+                                    zip = item.zipcode
+                                }).Single();
 
-            IEnumerable<UserDTO> userDTO = DTOMapper.UserConvertToDTO(user);
+                   // UserDTO userDTO = DTOMapper.UserConvertToDTO(user);
 
-            var json = JsonConvert.SerializeObject(userDTO);
+                    var json = JsonConvert.SerializeObject(user);
 
-            return json;
+                    return json;
+                }
+                catch (ArgumentNullException e)
+                {
+                    return null;
+                }
+
+
+              
+            }
         }
     }
 }

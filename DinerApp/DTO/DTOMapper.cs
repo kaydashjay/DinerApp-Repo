@@ -34,7 +34,7 @@ namespace DTO
         //USER MAPPING
         public static UserDTO UserConvertToDTO(this User data)
         {
-            return new UserDTO(data.user_id,data.fname, data.lname, data.street, data.city, data.state, data.zipcode);
+            return new UserDTO( data.user_id, data.username, data.password, data.fname, data.lname, data.street, data.city, data.state, data.zipcode);
 
         }
         public static IEnumerable<UserDTO> UserConvertToDTO(this IEnumerable<User> data)

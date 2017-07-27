@@ -14,6 +14,10 @@ namespace DTO
         [DataMember]
         public string fname { get; set; }
         [DataMember]
+        public string username { get; set; }
+        [DataMember]
+        public string password { get; set; }
+        [DataMember]
         public string lname { get; set; }
         [DataMember]
         public int id { get; set; }
@@ -27,8 +31,10 @@ namespace DTO
         public int zip { get; set; }
 
         public UserDTO() { }
-        public UserDTO(int Id, string Fname, string Lname, string street,string city, string state, int zipcode  )
+        public UserDTO(int Id, string user, string pwd, string Fname, string Lname, string street,string city, string state, int zipcode  )
         {
+            username = user;
+            password = pwd;
             this.fname = Fname;
             this.lname = Lname;         
             this.id = Id;
