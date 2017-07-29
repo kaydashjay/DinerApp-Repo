@@ -16,7 +16,8 @@ var d = document;
         var checkoutButton = d.getElementById("checkout");
         var message = d.getElementById("msg"); //"Cart is empty" message
         var saveMenuItemModal = d.getElementById("addMenuItem");
-
+        var editMEnuItemModal = d.getElementById("editMenuItemModal");
+        
         var totalP = d.getElementById("total");
         totalP.innerText = "$0.00"; //set initial value of total
 
@@ -73,17 +74,80 @@ var d = document;
         
  /******************ADD MENU ITEM******************** */
         saveMenuItemModal.addEventListener("click", function (event) {
-            c.log(event.target.innerHTML);
         if (event.target.innerText == "Save changes"){
             var name = d.getElementById("Name");
             var price = d.getElementById("Price");
             var category = d.getElementById("category");
+            var alert = d.getElementById("addAlert");     
 
-                Menu.addItem(name.value, price.value, category.value, function (){
-                    alert("Successfully added "+name.value+" to the menu");
-                    getMenu();
+                if (isNaN(Number.parseFloat(price.value))){
+                    alert.className = " alert alert-warning";
+                    alert.innerHTML = "<strong>Warning!</strong> '"+price.value+"' is not a number";
+                    alert.style = "display:block;"; 
+
+                }
+                else{
+                    Menu.addItem(name.value, price.value, category.value, function (){
+                    alert.className = "alert alert-success";
+                    alert.innerHTML = "<strong>Success!</strong> You have updated '"+name.innerText+"'";
+                    alert.style = "display:block;";                    switch (category.value){
+                        case 1: 
+                            apps.appendChild(createMenuLi(name.value, price.value));;
+                        case 2:
+                            chicken.appendChild(createMenuLi(name.value, price.value));
+                        case 3:
+                            burgers.appendChild(createMenuLi(name.value, price.value));
+                        case 4:
+                            salads.appendChild(createMenuLi(name.value, price.value));
+                    }
                 });
+                }
+                
          }
+        });
+         /******************EDIT MENU ITEM******************** */
+        editMEnuItemModal.addEventListener("click", function (){
+             var name = d.getElementById("editItemLabel");
+                var price = d.getElementById("editPrice");
+                var category = d.getElementById("editCategory");
+                var alert = d.getElementById("editAlert");
+
+            if (event.target.innerText == "Save changes"){
+                var changedPrice = d.getElementById("editPrice");
+                var changedCategory = d.getElementById("editCategory");
+
+                if (isNaN(Number.parseFloat(price.value))){
+                   alert.className = " alert alert-warning";
+                    alert.innerHTML = "<strong>Warning!</strong> '"+price.value+"' is not a number";
+                    alert.style = "display:block;";
+                }
+                else{
+                     Menu.updateItem(name.innerText.toString(),changedPrice.value, changedCategory.value, function (){
+                    alert.className = "alert alert-success";
+                    alert.innerHTML = "<strong>Success!</strong> You have updated '"+name.innerText+"'";
+                    alert.style = "display:block;";
+                  });
+                }
+            }
+            if (event.target.innerText == "Close"){
+                alert.style = "display:none;"
+                while (apps.hasChildNodes()) {
+                    apps.removeChild(apps.lastChild);
+                }
+                while (burgers.hasChildNodes()) {
+                    burgers.removeChild(burgers.lastChild);
+                }
+                while (chicken.hasChildNodes()) {
+                    chicken.removeChild(chicken.lastChild);
+                }
+                while (salads.hasChildNodes()) {
+                    salads.removeChild(salads.lastChild);
+                }
+                getMenu();
+            }  
+                          
+           
+            
         });
         //gets user information from user.js
         User.getUser(function (data) {
@@ -101,6 +165,7 @@ var d = document;
          });
         function createCartLit(item, price, quantity) {
             var li = CreateLi(item,price );//creats the list item
+            li.style = "list-group-item";
             Cart.getTotal(function (total){
                  totalP.innerHTML = "$" + total;}); //display the updated total when item added to cart
             var amount = li.childNodes[2].childNodes[1]//grabs amount input element    
@@ -170,10 +235,19 @@ var d = document;
             var amount = li.childNodes[2].childNodes[1];
             var food = li.childNodes[0].nodeValue;
             var price = li.childNodes[2].childNodes[0].nodeValue;
+            var editButton = d.createElement("button");
+            editButton.className="btn btn-success";
+            editButton.setAttribute("data-toggle", "modal");
+            editButton.setAttribute("data-target", "#editMenuItemModal");
+            editButton.innerText = "Edit";
+            editButton.style = "float: left; margin-right: 15px;"
+            li.insertBefore(editButton, li.childNodes[0]);
+            var price = li.childNodes[3].childNodes[0].nodeValue;
+
             amount.value = 0;
-            var addButton = li.childNodes[1];
+            var addButton = li.childNodes[2];
             addButton.innerText = "Add to Cart";
-            li.childNodes[2].childNodes[0].nodeValue = "$" + price; //adds the $ sign while keeping the original price value as a number
+            li.childNodes[3].childNodes[0].nodeValue = "$" + price; //adds the $ sign while keeping the original price value as a number
 
             return li;
         }
@@ -212,6 +286,7 @@ var d = document;
         //handles event for when the entire cart is clicked
         cart.addEventListener("click", function (event) {
             var food = event.target.parentNode.childNodes[0];
+
  /**************************UPDATE**********************/
             //event handling for update button of each newly added item
             if (event.target.innerText == "Update") {
@@ -222,8 +297,7 @@ var d = document;
                     totalP.innerText = "$" + total;
                 })
                 });
-                
-           
+       
                 var updateButton = event.target.parentNode.childNodes[2];
                     updateButton.className = "btn btn-default";
             }
@@ -256,6 +330,17 @@ var d = document;
         //for click
         menu.addEventListener("click", function (event) {
             
+            /************EDIT BUTTON************** */
+            if (event.target.innerText == "Edit") {
+                var item =  event.target.nextSibling.nodeValue;
+                d.getElementById("editItemLabel").innerText = item
+                Menu.getItem(item, function (data){
+                    var price = d.getElementById("editPrice");
+                    var category = d.getElementById("editCategory");
+                    price.value=data.price;
+                    category.value = data.cat;
+                });
+            }
             /*****************ADD TO CART********************* */
             //event handling for add button of each newly added item
             if (event.target.innerText == "Add to Cart") {

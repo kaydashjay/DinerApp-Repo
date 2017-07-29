@@ -12,7 +12,7 @@ namespace DTO
         //MENU MAPPING
         public static MenuDTO MenuConvertToDTO(this Menu data)
         {
-            return new MenuDTO(data.menu_id, data.name, System.Convert.ToDouble(data.price), data.cat_id);
+            return new MenuDTO(data.menu_id, data.name, data.price, data.cat_id);
 
         }
         public static IEnumerable<MenuDTO> MenuConvertToDTO (this List <Menu> data)

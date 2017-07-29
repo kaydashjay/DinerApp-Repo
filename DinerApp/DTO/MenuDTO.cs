@@ -19,10 +19,10 @@ namespace DTO
         [DataMember]
         public int cat { get; set; }
         [DataMember]
-        public double price { get; set; }
+        public decimal price { get; set; }
 
         public MenuDTO() { }
-        public MenuDTO(int i, string n, double p, int cat)
+        public MenuDTO(int i, string n, decimal p, int cat)
         {
             id = i;
             name = n;

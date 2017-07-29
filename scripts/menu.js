@@ -28,6 +28,13 @@ function ajax(url, method, data) {
             xhr.send(data);
         });
     }
+      //gets the item by name
+    function getItem(name, callback){
+        var promise = ajax("http://localhost/DinerAppAPI/api/Menu/"+name+"/", "GET", null);
+         promise.then(function (data){
+            callback(JSON.parse(data));
+        })
+    };
 
 var getMenu = function (callback){
 var promise = ajax("http://localhost/DinerAppAPI/api/Menu", "GET",null);
@@ -48,16 +55,16 @@ function addItem(item, price,cat_id, callback){
               });
     };
 
-    //update the quantity of an item
-    function updateItem(name, price,cat_id, callback){
-        var item = "\"{'name':'"+name+"','price':'"+price+"', 'cat_it':"+Number.parseInt(quantity)+"}\"";
+    //update a menu item of an item
+    function updateItem(name,price,cat_id, callback){
+        var item = "\"{'name': '"+name+"','price':'"+price+"', 'cat_id':"+Number.parseInt(cat_id)+"}\"";
         var promise = ajax("http://localhost/DinerAppAPI/api/Menu", "PUT", item);
         promise.then (function (){
             callback();
         })
     };
 
-//removes item from array
+//removes item from menu
     function removeItem(name, callback){
             var promise = ajax("http://localhost/DinerAppAPI/api/Menu/"+name+"/", "DELETE", null);
             promise.then(function (data){
@@ -70,6 +77,7 @@ return {
       getMenu:getMenu,
       addItem:addItem,
       updateItem:updateItem,
-      removeItem:removeItem
+      removeItem:removeItem,
+      getItem: getItem
         };
 })();

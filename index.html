@@ -1,6 +1,7 @@
 ﻿<html>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Diner App</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css">
     <link rel="stylesheet" href="styles/style.css">
@@ -25,7 +26,6 @@
                 <!-- <h1 id="title" class="text-center">Je'Nae's Diner</h1> -->
                  <form class="navbar-nav navbar-form navbar-right"> 
                      <div class="form-group"> 
-                        <!-- <label class="sr-only" for="exampleInputEmail3">Email address</label> -->
                          <input type="email" class="form-control" id="exampleInputEmail3" placeholder="Email"> 
                      </div> 
                      <div class="form-group"> 
@@ -42,6 +42,7 @@
             </div>
         </div>
     </nav> 
+    <!--ADD MENU ITEM MODEL  -->
 <div id="addMenuItem"class="modal fade" tabindex="-1" role="dialog"aria-labelledby="addItemLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -50,6 +51,8 @@
         <h4 class="modal-title" id ="addItemLabel">Add To Menu</h4>
       </div>
       <div class="modal-body">
+          <div id="addAlert" class="alert alert-success"style="display:none;">
+            </div>
          <form id = "saveMenuItem" method="post"> 
             <div class="form-group"> 
             <!-- <label class="sr-only" for="exampleInputEmail3">Email address</label> -->
@@ -73,6 +76,46 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!--EDIT MENU ITEM  -->
+<div id="editMenuItemModal"class="modal fade" tabindex="-1" role="dialog"aria-labelledby="editItemLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id ="editItemLabel"></h4>
+      </div>
+      <div class="modal-body">
+          <div id="editAlert" class="alert alert-success"style="display:none;">
+            
+            </div>
+         <form id = "editMenuItemForm" method="post"> 
+            <div class="form-group">
+                 <label class="sr-only" for="editPrice">Price</label>  
+                 Price</br>
+                <input type="text" class="form-control" id="editPrice" placeholder="Price" required> 
+            </div>
+            <div  class="for-group">
+                <label class="sr-only" for="editCategory">Category</label>
+                Category</br> 
+                <select id = "editCategory"multiple class="form-control" required>
+                    <option value = "1">Appetizers</option>
+                    <option value = "2">Chicken</option>
+                    <option value = "3">Burgers</option>
+                    <option value = "4">Salads</option>
+                    
+                </select>
+            </div>            
+                </form>  
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="eClose" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div><!-- /.modal-content -->

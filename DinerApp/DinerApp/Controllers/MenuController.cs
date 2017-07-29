@@ -35,6 +35,31 @@ namespace DinerApp.Controllers
                 return json;
             }
         }
+        [Route("api/Menu/{name}")]
+        public string GetMenuItem(string name)
+        {
+            using (DinerAppDB2Entities db = new DinerAppDB2Entities())
+            {
+                MenuDTO item = (from listitem in db.Menus
+                                    //join m in db.Menus on id equals m.menu_id into members
+                                where name== listitem.name
+                                select new MenuDTO()
+                                {
+                                    name = listitem.name,
+                                    price = listitem.price,
+                                    cat = listitem.cat_id
+                                }).Single();
+                if (item == null)
+                {
+                    return "Not Found";
+                }
+
+                var json = JsonConvert.SerializeObject(item);
+
+                return json;
+
+            }
+        }
 
         //need for cart async
         [HttpDelete]
@@ -107,7 +132,7 @@ namespace DinerApp.Controllers
                 item.cat_id = menu.cat_id;
                 item.price = menu.price;
                 db.SaveChanges();
-                return Ok(item);
+                return Ok(menu);
             }
         }
 
