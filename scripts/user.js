@@ -31,9 +31,17 @@ window.User = (function(){
     
     };
 
+    function authenticate(user, pwd, callback){
+        var promise = ajax("http://localhost/DinerAppAPI/api/User/AuthenticateUser/"+user+"/"+pwd+"/", "GET", null);
+        promise.then(function(data){
+            callback(JSON.parse(data));
+        })
+    }
+
    
     return {
-        getUser: getUser
+        getUser: getUser,
+        authenticate: authenticate
     };
     
 })();

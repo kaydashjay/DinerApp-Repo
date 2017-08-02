@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 
 namespace DinerApp.Controllers
 {
-    [EnableCors(origins:"*", headers: "*", methods: "*")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UserController : ApiController
     {
 
@@ -39,7 +39,7 @@ namespace DinerApp.Controllers
                                     zip = item.zipcode
                                 }).Single();
 
-                   // UserDTO userDTO = DTOMapper.UserConvertToDTO(user);
+                    // UserDTO userDTO = DTOMapper.UserConvertToDTO(user);
 
                     var json = JsonConvert.SerializeObject(user);
 
@@ -51,8 +51,53 @@ namespace DinerApp.Controllers
                 }
 
 
-              
+
             }
         }
+        [HttpGet]
+        [Route("api/User/AuthenticateUser/{username}/{password}")]
+        public string AuthenticateUser(string username, string password)
+        {
+            using (DinerAppDB2Entities db = new DinerAppDB2Entities())
+            {
+                try
+                {
+                    var user = (from item in db.Users
+                                where username == item.username && password == item.password
+                                select item).SingleOrDefault();
+                                
+
+                    if (user==null)
+                    {
+                        return null;
+                    }
+                                /*new UserDTO()
+                                {
+                                    username = item.username,
+                                    password = item.password,
+                                    fname = item.fname,
+                                    lname = item.lname,
+                                    street = item.street,
+                                    city = item.city,
+                                    state = item.state,
+                                    zip = item.zipcode
+                                }).Single();*/
+
+                     UserDTO userDTO = DTOMapper.UserConvertToDTO(user);
+                    
+
+                    var json = JsonConvert.SerializeObject(userDTO);
+
+                    return json;
+                }
+                catch (ArgumentNullException e)
+                {
+                    return null;
+                }
+            }
+        }
+
     }
 }
+
+       

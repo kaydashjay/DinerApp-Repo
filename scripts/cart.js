@@ -50,12 +50,15 @@ window.cart = (function(){
 
 //checks if cart is empty
     function isEmpty(){
-        if (cart.length==0){
+        getCart(function (data){
+            if (data.length ==0){
             return true;
         }
         else{
             return false;
         }
+        })
+        
     }
 
 //adds item to cart array

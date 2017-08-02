@@ -30,7 +30,7 @@ namespace DinerApp.Controllers
 
                 IEnumerable<MenuDTO> menuDTO = DTOMapper.MenuConvertToDTO(menu);
 
-                var json = JsonConvert.SerializeObject(menuDTO);
+                string json = JsonConvert.SerializeObject(menuDTO);
 
                 return json;
             }
@@ -41,7 +41,6 @@ namespace DinerApp.Controllers
             using (DinerAppDB2Entities db = new DinerAppDB2Entities())
             {
                 MenuDTO item = (from listitem in db.Menus
-                                    //join m in db.Menus on id equals m.menu_id into members
                                 where name== listitem.name
                                 select new MenuDTO()
                                 {
@@ -49,6 +48,7 @@ namespace DinerApp.Controllers
                                     price = listitem.price,
                                     cat = listitem.cat_id
                                 }).Single();
+
                 if (item == null)
                 {
                     return "Not Found";
@@ -138,8 +138,8 @@ namespace DinerApp.Controllers
 
         //need for cart async
         [HttpDelete]
-        [Route("api/Cart/{name}")]
-        public IHttpActionResult DeleteCartItemByName(string name)
+        [Route("api/Menu/{name}")]
+        public IHttpActionResult DeleteMenuItemByName(string name)
         {
             using (DinerAppDB2Entities db = new DinerAppDB2Entities())
             {

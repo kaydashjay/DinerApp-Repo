@@ -17,7 +17,34 @@ var d = document;
         var message = d.getElementById("msg"); //"Cart is empty" message
         var saveMenuItemModal = d.getElementById("addMenuItem");
         var editMEnuItemModal = d.getElementById("editMenuItemModal");
+        // var user = d.getElementById("user");
+        // var pwd = d.getElementById("pwd");
+        // var main = d.getElementById("main");
+        // var form = d.getElementById("signinForm");
+         
+    //     form.addEventListener("submit", function (event){
+    //        main.style = "display:block;";
+    //       //c.log(event.target.innerText);
+    //         //if (event.target.innerText == "Sign in"){
+                
+    //             User.authenticate(user.value, pwd.value, function (data){
+    //             c.log(data);
+    //             if (data == null){
+    //                 alert("Username or Password is incorrect");
+    //             }
+    //             else if (data.username == "admin"){
+    //                 c.log("hello");
+    //                 main.style = "display:block;";
+    //             }
+    //             else{
+
+    //             }
+    //     });
+    //        // }
         
+    //     })
+        
+    // }
         var totalP = d.getElementById("total");
         totalP.innerText = "$0.00"; //set initial value of total
 
@@ -107,14 +134,16 @@ var d = document;
         });
          /******************EDIT MENU ITEM******************** */
         editMEnuItemModal.addEventListener("click", function (){
-             var name = d.getElementById("editItemLabel");
-                var price = d.getElementById("editPrice");
-                var category = d.getElementById("editCategory");
-                var alert = d.getElementById("editAlert");
+            var name = d.getElementById("editItemLabel");
+            var price = d.getElementById("editPrice");
+            var category = d.getElementById("editCategory");
+            var alert = d.getElementById("editAlert");
+            var changedPrice;
+            var changedCategory;
 
             if (event.target.innerText == "Save changes"){
-                var changedPrice = d.getElementById("editPrice");
-                var changedCategory = d.getElementById("editCategory");
+                changedPrice = d.getElementById("editPrice");
+                changedCategory = d.getElementById("editCategory");
 
                 if (isNaN(Number.parseFloat(price.value))){
                    alert.className = " alert alert-warning";
@@ -131,7 +160,8 @@ var d = document;
             }
             if (event.target.innerText == "Close"){
                 alert.style = "display:none;"
-                while (apps.hasChildNodes()) {
+                
+                     while (apps.hasChildNodes()) {
                     apps.removeChild(apps.lastChild);
                 }
                 while (burgers.hasChildNodes()) {
@@ -144,6 +174,8 @@ var d = document;
                     salads.removeChild(salads.lastChild);
                 }
                 getMenu();
+                
+               
             }  
                           
            
@@ -165,7 +197,7 @@ var d = document;
          });
         function createCartLit(item, price, quantity) {
             var li = CreateLi(item,price );//creats the list item
-            li.style = "list-group-item";
+            
             Cart.getTotal(function (total){
                  totalP.innerHTML = "$" + total;}); //display the updated total when item added to cart
             var amount = li.childNodes[2].childNodes[1]//grabs amount input element    
@@ -253,12 +285,13 @@ var d = document;
         }
         //creats cart list items
         function createCartLi(listItem) {
-          var li = CreateLi(listItem[0]['name'], listItem[0].price);//creats the list item
+            c.log(listItem);
+          var li = CreateLi(listItem.name, listItem.price);//creats the list item
            Cart.getTotal(function (total){
                  totalP.innerText = "$" + total;
             }); //display the updated total when item added to cart
             var amount = li.childNodes[2].childNodes[1]//grabs amount input element    
-            amount.value = listItem[0].quantity;
+            amount.value = listItem.quantity;
             amount.min = 1;
 
             var price = li.childNodes[2].childNodes[0].nodeValue;
@@ -310,13 +343,20 @@ var d = document;
                             totalP.innerText = "$" + total; //deletes item from cart array and then gets the total
                         event.target.parentNode.remove(); //removes from display 
             });//update the displayed total 
+            Cart.getCart(function (data){
+            if (data.length ==0){
+                message.style.display = "block";//display message if caret empty
+                checkoutButton.disabled = true;
+            }
+          });  
                 });
-                if (Cart.isEmpty()) {
-                    message.style.display = "block";//display message if caret empty
-                    checkoutButton.disabled = true;
-                }
+       
+            
                 }
             }
+       
+                
+            
         });
 
         //event handling for when the quantity changes of each newly added item
@@ -344,23 +384,23 @@ var d = document;
             /*****************ADD TO CART********************* */
             //event handling for add button of each newly added item
             if (event.target.innerText == "Add to Cart") {
-                var amount = event.target.parentNode.childNodes[2].childNodes[1];
-                var food = event.target.parentNode.childNodes[0];
-                var price = event.target.parentNode.childNodes[2].childNodes[0];
-                price = price.nodeValue.replace("$", "");
+                var amount = event.target.parentNode.childNodes[3].childNodes[1];
+                var food = event.target.parentNode.childNodes[1];
+                //var price = event.target.parentNode.childNodes[3].childNodes[0];
+                //price = price.nodeValue.replace("$", "");
                 if (amount.value == 0) {
                     alert("Enter amount");
                 }
                 else {
-                        //add item to cart array
-                        Cart.addItem(food.nodeValue, price, amount.value, function () {
+                    Menu.getItem(food.nodeValue, function (menuItem){
+                     Cart.addItem(menuItem.name, menuItem.price, amount.value, function () {
                             Cart.getCart(function (data) {
                             //go through cart array and add to DOM
                             for(var i = 0 ; i<data.length; i++){
                                // if item already in DOM and the quantity in DOM and cart are different, make DOM = cart quantity
-                               if(data[i].name == food.nodeValue){
-                                   if (inDOMcart(food.nodeValue) ){
-                                        var li = getDOMcartItem(food.nodeValue);
+                               if(data[i].name == menuItem.name){
+                                   if (inDOMcart(menuItem.name) ){
+                                        var li = getDOMcartItem(menuItem.name);
                                             var q = Number.parseInt(li.childNodes[3].childNodes[1].value);
                                             var a = Number.parseInt(amount.value);
                                             q+=a;
@@ -390,7 +430,10 @@ var d = document;
                                    
                             }
 
-                        });        
+                        });
+                });
+                        //add item to cart array
+                               
                             });
                             
                       
@@ -401,4 +444,4 @@ var d = document;
         });
     };
 
-})(window.User, window.menu, window.cart /*making sure this function is aware of it*/ || ({})); //IIFE fu n
+})(window.User, window.menu, window.cart /*making sure this function is aware of it*/ || ({})); //IIFE
